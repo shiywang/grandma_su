@@ -1,0 +1,6 @@
+node_modules
+care_app/node_modules
+build
+.dockerignore
+Dockerfile
+Dockerfile.prod
