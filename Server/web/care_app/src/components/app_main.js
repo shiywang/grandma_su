@@ -8,10 +8,11 @@ import {
 } from '@ant-design/icons';
 import UserList from './user_list.js'
 import io from 'socket.io-client'
-import { faDiceFive } from '@fortawesome/free-solid-svg-icons';
+import {exceeded_threshold} from './device_type.js'
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
+var randomColor = require('randomcolor'); // import the script
 
 var socketio_server = 'http://127.0.0.1:4000/';
 var topic_name = "userdata";
@@ -56,6 +57,8 @@ class MainApp extends React.Component {
     .then((response) => response.json())
     .then((data) => {
       for (var key  in data){
+        data[key]["watch"] = exceeded_threshold(data[key].data[data[key].data.length - 1].value, data[key].device_type);  // determine whether to add to watch list
+        data[key]["color"] = randomColor();
         this.OnlineSeniors.set(key, data[key]);
       }
       this.setState({flag: !this.state.flag});  // Triggers a re-rendering
@@ -65,7 +68,9 @@ class MainApp extends React.Component {
   socket_cb = data => {
     if( "device_id" in data){
       if(data.command === "ping" && "name" in data ){
-        console.log("New device ping received.");
+        data["watch"] = exceeded_threshold(data.data[data.data.length - 1].value, data.device_type);  // determine whether to add to watch list
+        data["color"] = randomColor();
+        console.log("New device ping received.", data);
         this.OnlineSeniors.set(data.device_id, data);
       }
 
@@ -76,9 +81,12 @@ class MainApp extends React.Component {
 
       else if(data.command === "data" && this.OnlineSeniors.has(data.device_id)){
         console.log("Data received");
-        console.log(data);
         let new_data = {"value": data.value, "time": data.time};
         this.OnlineSeniors.get(data.device_id).data.push(new_data)
+        this.OnlineSeniors.get(data.device_id).watch = exceeded_threshold(
+          new_data.value, 
+          this.OnlineSeniors.get(data.device_id).device_type
+        ); 
 
         // Maintain array size
         if(this.OnlineSeniors.get(data.device_id).data.length > max_array_len){
@@ -117,7 +125,10 @@ class MainApp extends React.Component {
           <Header className="site-layout-background" style={{ padding: 0 }} />
           <Content style={{ margin: '0 16px' }}>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              <UserList online_seniors={Array.from(this.OnlineSeniors.values())}/>
+              <UserList 
+                online_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == false)}
+                watch_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == true)}
+              />
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>NE Lab ©2021 Umass Amherst</Footer>

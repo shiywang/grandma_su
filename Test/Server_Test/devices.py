@@ -1,6 +1,30 @@
 import os
-from random import randint
+from random import randint, randrange, random
 import binascii, enum, time
+
+Device_Description = {
+    "RR": {
+        "id": 1,
+        "watch_threshold_min": 600,
+        "watch_threshold_max": 1200,
+        "trigger_min_direction": [700, 650, 550],
+        "trigger_max_direction": [1000, 1100, 1200],
+    },
+    "TEMP": {
+        "id": 2,
+        "watch_threshold_min": 97,
+        "watch_threshold_max": 99.5,
+        "trigger_min_direction": [97, 96.5, 96],
+        "trigger_max_direction": [99.5, 100.0, 100.9],
+    },
+    "SPO2": {
+        "id": 3,
+        "watch_threshold_min": 95,
+        "watch_threshold_max": 99.5,
+        "trigger_min_direction": [95, 93, 90],
+        "trigger_max_direction": [100, 100.0, 100],
+    },
+}
 
 class Device_Types(enum.Enum):
 	ECG  = 1
@@ -10,35 +34,30 @@ class Device_Types(enum.Enum):
 
 
 class Device:
-	def __init__(self, low_range, high_range):
-		self.lower  = low_range
-		self.higher = high_range
+	def __init__(self, mtype, noise_amplitude=1):
+		self.type   = mtype
+		self.lower  = Device_Description[self.type.name]["watch_threshold_min"]
+		self.higher = Device_Description[self.type.name]["watch_threshold_max"]
 		self.id		= binascii.hexlify(bytearray(os.urandom(6))).decode('ascii').upper()
-		self.type   = None
+		self.value  = (self.lower + self.higher) / 2
+		self.noise_amplitude = noise_amplitude
 
 	def get_value(self):
-		return randint(self.lower, self.higher)
-
-
-class ECG_Device(Device):
-	def __init__(self):
-		Device.__init__(self, -10, 10)
-		self.type = Device_Types.ECG
+		noise = random()*2-1			# generate random noise from -1 to 1
+		self.value = round(self.value + (noise * self.noise_amplitude), 2)
+		return self.value
 
 
 class RR_Device(Device):
 	def __init__(self):
-		Device.__init__(self, 950, 1100)
-		self.type = Device_Types.RR
+		Device.__init__(self, Device_Types.RR, noise_amplitude=10)
 
 
 class Temperature_Device(Device):
 	def __init__(self):
-		Device.__init__(self, 31, 40)
-		self.type = Device_Types.TEMP
+		Device.__init__(self, Device_Types.TEMP, noise_amplitude=0.5)
 
 
 class SPO2_Device(Device):
 	def __init__(self):
-		Device.__init__(self, 31, 40)
-		self.type = Device_Types.SPO2
+		Device.__init__(self, Device_Types.SPO2, noise_amplitude=1)

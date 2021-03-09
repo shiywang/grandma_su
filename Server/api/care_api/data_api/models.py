@@ -64,7 +64,7 @@ class Sensor_Data(models.Model):
 
 	senior 	= models.ForeignKey(Senior, on_delete=models.CASCADE)
 	time	= models.PositiveIntegerField()			# Stored as 32bit unix time
-	value 	= models.PositiveIntegerField()
+	value 	= models.FloatField()
 	type    = models.CharField(max_length=5, choices=TYPES)
 
 	class Meta:

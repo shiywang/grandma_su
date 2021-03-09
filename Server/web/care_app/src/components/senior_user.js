@@ -1,46 +1,34 @@
 import React from 'react';
-import { Avatar,  Typography, Row, Col, Divider} from 'antd';
+import { Avatar,  Typography, Row, Col, Divider, Modal} from 'antd';
 import "antd/dist/antd.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMars, faVenus, faBatteryFull, faBatteryThreeQuarters, faBatteryHalf, faBatteryQuarter, faBatteryEmpty} from '@fortawesome/free-solid-svg-icons'
-//import {Device_Title, RR_Device_Title} from './device_type.js'
+import {Device_Tile, Device_Modal} from './device_type.js'
 
 const { Text } = Typography;
 var randomColor = require('randomcolor'); // import the script
 
 class SeniorUser extends React.Component {
-  state = {
-    collapsed: false,
-  };
-
+  
   constructor(props){
     super(props);
+    this.state = {
+      collapsed: false,
+      isModalVisible: false,
+    };  
   }
 
-  componentDidMount(){
-    this.mycolor = randomColor()
-  }
-
-  senior_battery_icon = (val)=>{
-    if(val < 10){return <FontAwesomeIcon color='red' style={styles.batteryIcon} icon={faBatteryEmpty} size="lg"/>}
-    else if(val < 35){return <FontAwesomeIcon style={styles.batteryIcon} icon={faBatteryQuarter} size="lg"/> }
-    else if(val < 60){return <FontAwesomeIcon style={styles.batteryIcon} icon={faBatteryHalf} size="lg"/> }
-    else if(val < 90){return <FontAwesomeIcon style={styles.batteryIcon} icon={faBatteryThreeQuarters} size="lg"/>}
-    else{
-      return <FontAwesomeIcon style={styles.batteryIcon} icon={faBatteryFull} size={32}/>
-    }
-  };
+  componentDidMount(){ }
 
   senior_object = () => {
     return (  
       <>{ 
       this.props.element_size === 1 ?
 
-      <div> {/***  Normal Mode ****/}
-        <Row>
+        <Row>  {/***  Normal Mode ****/}
           {/* Avatar */}
           <Col flex={1}> 
-            <Avatar size={24} style={{ marginRight:5, backgroundColor: this.mycolor}}  >{this.props.data.name[0]}</Avatar>           
+            <Avatar size={24} style={{ marginRight:5, backgroundColor: this.props.data.color}}  >{this.props.data.name[0]}</Avatar>           
           </Col>
 
           {/* Name and Device ID*/}
@@ -75,27 +63,19 @@ class SeniorUser extends React.Component {
                   <Divider type="vertical" style={{ margin: 0, height: '100%'}}/>
               </Col>
               <Col > 
-                <Row justify='space-around'>
-                    <Col >
-                        <Text code style={{}}>{this.props.data.device_type}</Text>
-                    </Col>
-                </Row>
-                <Row justify='space-around'>
-                    <Col  >
-                        <Text strong style={{fontSize: 20}}>
-                            {this.props.data.data[ this.props.data.data.length - 1].value}
-                        </Text>
-                    </Col>
-                </Row>
+                <Device_Tile 
+                  device_type={this.props.data.device_type} 
+                  current_data={this.props.data.data[ this.props.data.data.length - 1].value}
+                  size={this.props.element_size}
+                  watch={this.props.data.watch}
+                />
               </Col>
             </Row>
           </Col>
         </Row>      
-      </div>
 
       : 
-      <div> {/***  Bulk Mode ****/}
-        <Row justify='space-around'>
+        <Row justify='space-around'>  {/***  Bulk Mode ****/}
           <Col> 
             <Text style={{fontSize: 10, textAlign: 'center'}}> {'@'+this.props.data.device_id} </Text> 
           </Col>
@@ -106,23 +86,50 @@ class SeniorUser extends React.Component {
             </Text> 
           </Col>
         </Row>
-      </div>
     }</>
     ) 
   }
 
+  MouseOver = (event) =>{
+    event.currentTarget.style.boxShadow = "1px 1px 1px 0px " + this.props.data.color;
+  }
+
+  MouseOut = (event) =>{
+    event.currentTarget.style.boxShadow = "2px 2px 2px 2px #dcdcdc";
+  }
+
+  ModelClose = () =>{
+    this.setState({isModalVisible: false});
+  }
+
+  ModelOpen = () =>{
+    this.setState({isModalVisible: true});
+  }
 
   render() {
     return (
-      <div>
-        <div 
-          style = { this.props.element_size === 1 ? styles.card_div : styles.card_div_small} 
-          flex ='auto'
-        >
-          {this.senior_object()}
-        </div>
-        
+
+      <>
+      <div 
+        style = { this.props.element_size === 1 ? styles.card_div : styles.card_div_small} 
+        flex ='auto'
+        onClick = {this.ModelOpen} 
+        onMouseOver={this.MouseOver} onMouseOut={this.MouseOut}
+      >
+        {this.senior_object()}
       </div>
+        
+      <Modal
+          visible={this.state.isModalVisible} 
+          onOk={this.ModelClose} 
+          onCancel={this.ModelClose} 
+          width={'50%'}
+          title="More ..."
+        >
+          <Device_Modal {...this.props}/>
+      </Modal>
+
+      </>
     );
   }
 }
