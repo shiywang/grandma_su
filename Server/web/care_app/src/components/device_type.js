@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout,  Typography, Row, Col, Divider, Card} from 'antd';
+import {Typography, Row, Col, Divider, Card} from 'antd';
 import "antd/dist/antd.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, } from '@fortawesome/free-solid-svg-icons'
@@ -7,7 +7,6 @@ import {MyGraph} from './data_graph.js'
 import GaugeChart from 'react-gauge-chart'
 
 const { Text } = Typography;
-const { Meta } = Card;
 
 export const Device_Description = {
     "RR": {
@@ -16,13 +15,17 @@ export const Device_Description = {
         "watch_threshold_max": 1200,
         "trigger_min_direction": [700, 650, 550],      
         "trigger_max_direction": [1000, 1100, 1200],
+        "graph_min": 500,
+        "graph_max": 1300,
     }, 
     "TEMP": {
         "id": 2,
-        "watch_threshold_min": 97,
+        "watch_threshold_min": 95,
         "watch_threshold_max": 99.5,
         "trigger_min_direction": [97, 96.5, 96],      
         "trigger_max_direction": [99.5, 100.0, 100.9],
+        "graph_min": 90,
+        "graph_max": 101,
     }, 
     "SPO2": {
         "id": 3,
@@ -30,8 +33,12 @@ export const Device_Description = {
         "watch_threshold_max": 99.5,
         "trigger_min_direction": [95, 93, 90],      
         "trigger_max_direction": [100, 100.0, 100],
+        "graph_min": 94,
+        "graph_max": 102,
     }, 
 }
+const bckColor = "#ff0800";
+const tColor = "#ff0800";
 
 export const exceeded_threshold = (val, device_type) =>{
     if(device_type in  Device_Description){
@@ -46,8 +53,36 @@ export const exceeded_threshold = (val, device_type) =>{
 
 export class Device_Tile extends React.Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+          isTextVisible: false,
+          bckColor: bckColor,
+          tColor: tColor,
+        };  
+    }
+
+   componentDidMount(){
+        if(this.props.watch){
+            setInterval(this.blinkText, 500);
+        } 
+    }
+
+    blinkText = ()=>{
+        var sLb = ! (this.state.isTextVisible);
+        if(sLb){
+            this.setState({tColor: bckColor});
+            this.setState({bckColor: tColor});
+        }
+        else{
+            this.setState({tColor: tColor});
+            this.setState({bckColor: bckColor});
+        }
+        this.setState({isTextVisible: sLb});
+    }
+
   render() {
-    const watch_style  = {fontSize: 20, color: 'red'};
+    const watch_style  = {fontSize: 20, color: this.state.tColor, padding: 2, borderRadius: 4,};
     const normal_style = {fontSize: 20};
 
     return (
@@ -61,7 +96,7 @@ export class Device_Tile extends React.Component {
                 <Col>
                     <Text strong style={this.props.watch ? watch_style : normal_style}>
                         {this.props.current_data}
-                    </Text>
+                    </Text>                    
                 </Col>
             </Row>
         </>
@@ -91,14 +126,17 @@ export class Device_Modal extends React.Component {
                 </Col>
 
                 {/* Guage */}
-                <Col style={styles.pinfo} span={11}>
+                <Col style={styles.gbox} span={11}>
                     <GaugeChart id="gauge-chart3" 
                         nrOfLevels={3} 
                         arcsLength={[0.2, 0.5, 0.25]}
                         colors={["#EA4228", "#5BE12C", "#F5CD19"]} 
-                        arcWidth={0.3} 
+                        textColor={"black"}
+                        arcWidth={0.1} 
+                        arcPadding={0.01}
                         percent={0.37} 
-                        hideText={true}
+                        formatTextValue={ value => this.props.data.data[this.props.data.data.length-1].value}
+                        needleColor={"#AEBAB1"}
                     />
                 </Col>
             </Row>
@@ -118,7 +156,14 @@ export class Device_Modal extends React.Component {
       borderRadius: 10, 
       margin: 5,
       padding: 10,
-      boxShadow: "1px 1px 1px 1px #dcdcdc"
+      boxShadow: "2px 2px 2px 2px #dcdcdc"
+    },
+    gbox:{
+        borderRadius: 10, 
+        margin: 5,
+        padding: 10,
+        boxShadow: "2px 2px 2px 2px #dcdcdc",
+        //backgroundColor: '#dcdcdc',
     },
   }
   

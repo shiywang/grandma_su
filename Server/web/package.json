@@ -1,8 +1,5 @@
 {
   "dependencies": {
-    "@nivo/core": "^0.67.0",
-    "@nivo/line": "^0.67.0",
-    "create-react-app": "^4.0.2",
-    "socket.io-client": "^3.1.1"
+    "create-react-app": "^4.0.2"
   }
 }

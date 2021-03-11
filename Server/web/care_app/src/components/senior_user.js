@@ -2,7 +2,7 @@ import React from 'react';
 import { Avatar,  Typography, Row, Col, Divider, Modal} from 'antd';
 import "antd/dist/antd.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMars, faVenus, faBatteryFull, faBatteryThreeQuarters, faBatteryHalf, faBatteryQuarter, faBatteryEmpty} from '@fortawesome/free-solid-svg-icons'
+import { faMars, faVenus,} from '@fortawesome/free-solid-svg-icons'
 import {Device_Tile, Device_Modal} from './device_type.js'
 
 const { Text } = Typography;
@@ -16,6 +16,8 @@ class SeniorUser extends React.Component {
       collapsed: false,
       isModalVisible: false,
     };  
+    this.watch_style = {fontSize: 14, color: '#ff0800', padding: 2, borderRadius: 4,};
+    this.normal_style = {fontSize: 14};
   }
 
   componentDidMount(){ }
@@ -76,13 +78,20 @@ class SeniorUser extends React.Component {
 
       : 
         <Row justify='space-around'>  {/***  Bulk Mode ****/}
+          {/* Avatar */}
           <Col> 
-            <Text style={{fontSize: 10, textAlign: 'center'}}> {'@'+this.props.data.device_id} </Text> 
+            <Avatar size={16} style={{ marginRight:0, backgroundColor: this.props.data.color}}  >{this.props.data.name[0]}</Avatar>           
           </Col>
-          <Col><Divider type="vertical" style={{height: "100%"}} /></Col>
           <Col> 
-            <Text code strong style={{fontSize: 14, textAlign: 'center'}}> 
-              R-R:  {this.props.data.data[ this.props.data.data.length - 1].value}
+            <Text style={{fontSize:10, textAlign: 'center'}}> {'@'+this.props.data.device_id.substr(0, 6)} </Text> 
+          </Col>
+          <Col><Divider type="vertical" style={{height: "100%", margin: 0}} /></Col>
+          <Col> 
+            <Text style={{fontSize: 10, textAlign: 'center'}}> 
+              {this.props.data.device_type}: 
+            </Text> 
+            <Text code strong style={this.props.data.watch ? this.watch_style : this.normal_style}>
+              {this.props.data.data[ this.props.data.data.length - 1].value}
             </Text> 
           </Col>
         </Row>
@@ -123,7 +132,7 @@ class SeniorUser extends React.Component {
           visible={this.state.isModalVisible} 
           onOk={this.ModelClose} 
           onCancel={this.ModelClose} 
-          width={'50%'}
+          width={'60%'}
           title="More ..."
         >
           <Device_Modal {...this.props}/>
@@ -143,14 +152,17 @@ const styles = {
     margin: 5,
     padding: 10,
     backgroundColor: 'white',
-    boxShadow: "2px 2px 2px 2px #dcdcdc"
+    boxShadow: "2px 2px 2px 2px #dcdcdc",
+    cursor: "pointer",
+    
   },
   card_div_small:{
     borderRadius: 5, 
-    margin: 5,
-    padding: 5,
+    margin: 2,
+    padding: 3,
     backgroundColor: 'white',
-    boxShadow: "2px 2px 2px 2px #dcdcdc"
+    boxShadow: "2px 2px 2px 2px #dcdcdc",
+    cursor: "pointer",
   },
   batteryIcon:{
      marginLeft: 8,

@@ -16,11 +16,16 @@ class UserList extends React.Component {
     super(props);
     this.state = {
       collapsed: false,
-      element_size: 1
     };
+
+    this.online_element_size = 1;
+    this.others_element_size = 1;
   }
 
   render() {
+    this.online_element_size = this.props.watch_seniors.length < 50 ? 1 : 2;
+    this.others_element_size = this.props.online_seniors.length < 50 ? 1 : 2;
+
     return (
       <div>
         {/* Watch List */}
@@ -38,14 +43,14 @@ class UserList extends React.Component {
 
              <div style={{padding: 30}}>
                 <List
-                    grid={this.state.element_size === 1 ? 
+                    grid={this.online_element_size === 1 ? 
                         {gutter: 16, xs: 1, sm: 2, md: 2, lg: 2, xl: 3, xxl: 5,} : 
-                        {gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 9,} 
+                        {gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 5, xxl: 8,} 
                     }
                     dataSource={this.props.watch_seniors} 
 
                     renderItem={item => (
-                        <SeniorUser data={item} element_size={this.state.element_size}/>
+                        <SeniorUser data={item} element_size={this.online_element_size}/>
                     )}
                 />
              </div>
@@ -55,14 +60,14 @@ class UserList extends React.Component {
         {/* Other Users */}
         <div>
           <List
-              grid={this.state.element_size === 1 ? 
+              grid={this.others_element_size === 1 ? 
                   {gutter: 16, xs: 1, sm: 2, md: 2, lg: 2, xl: 3, xxl: 5,} : 
-                  {gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 9,} 
+                  {gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 5, xxl: 8,} 
               }
               dataSource={this.props.online_seniors} 
 
               renderItem={item => (
-                  <SeniorUser data={item} element_size={this.state.element_size}/>
+                  <SeniorUser data={item} element_size={this.others_element_size}/>
               )}
           />
         </div>

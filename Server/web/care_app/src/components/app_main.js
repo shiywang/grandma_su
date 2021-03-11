@@ -58,7 +58,7 @@ class MainApp extends React.Component {
     .then((data) => {
       for (var key  in data){
         data[key]["watch"] = exceeded_threshold(data[key].data[data[key].data.length - 1].value, data[key].device_type);  // determine whether to add to watch list
-        data[key]["color"] = randomColor();
+        data[key]["color"] = randomColor({luminosity: 'dark',});
         this.OnlineSeniors.set(key, data[key]);
       }
       this.setState({flag: !this.state.flag});  // Triggers a re-rendering
@@ -69,7 +69,7 @@ class MainApp extends React.Component {
     if( "device_id" in data){
       if(data.command === "ping" && "name" in data ){
         data["watch"] = exceeded_threshold(data.data[data.data.length - 1].value, data.device_type);  // determine whether to add to watch list
-        data["color"] = randomColor();
+        data["color"] = randomColor({luminosity: 'dark',});
         console.log("New device ping received.", data);
         this.OnlineSeniors.set(data.device_id, data);
       }
