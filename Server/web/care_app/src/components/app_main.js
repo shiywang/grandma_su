@@ -14,9 +14,10 @@ const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 var randomColor = require('randomcolor'); // import the script
 
-var socketio_server = 'http://localhost:4000/';
+var home_addr = 'http://128.119.85.163';
+var socketio_server = home_addr + ':4000/';
 var topic_name = "userdata";
-var api_base_url = "http://localhost:8002/"
+var api_base_url = home_addr + ":8002/";
 
 let headers = new Headers();
 headers.append('Accept', 'application/json');
