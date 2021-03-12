@@ -38,6 +38,10 @@
 *.hex
 *.map
 
+# node modeule
+**/node_modules
+*.pyc
+
 # NRF52 SDK exlusions
 nRF5_SDK_17.0.0/*
 !nRF5_SDK_17.0.0/components/
