@@ -13,8 +13,10 @@ import {exceeded_threshold} from './device_type.js'
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 var randomColor = require('randomcolor'); // import the script
+var ip = require("ip");
 
-var home_addr = 'http://128.119.85.163';
+var home_addr      = "http://" + ip.address();
+//var home_addr = 'http://128.119.85.163';
 var socketio_server = home_addr + ':4000/';
 var topic_name = "userdata";
 var api_base_url = home_addr + ":8002/";
@@ -38,7 +40,8 @@ class MainApp extends React.Component {
   
   constructor(props){
     super(props);
-    console.log("starting")
+    console.log("starting");
+    console.log(api_base_url)
     this.state = {
       collapsed: false,
       flag: false
