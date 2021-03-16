@@ -37,7 +37,7 @@ export const Device_Description = {
         "graph_max": 102,
     }, 
 }
-const bckColor = "#ff0800";
+const bckColor = "#dcdcdc";
 const tColor = "#ff0800";
 
 export const exceeded_threshold = (val, device_type) =>{
@@ -55,35 +55,11 @@ export class Device_Tile extends React.Component {
 
     constructor(props){
         super(props);
-        this.state = {
-          isTextVisible: false,
-          bckColor: bckColor,
-          tColor: tColor,
-        };  
-    }
-
-   componentDidMount(){
-        if(this.props.watch){
-            setInterval(this.blinkText, 500);
-        } 
-    }
-
-    blinkText = ()=>{
-        var sLb = ! (this.state.isTextVisible);
-        if(sLb){
-            this.setState({tColor: bckColor});
-            this.setState({bckColor: tColor});
-        }
-        else{
-            this.setState({tColor: tColor});
-            this.setState({bckColor: bckColor});
-        }
-        this.setState({isTextVisible: sLb});
     }
 
   render() {
-    const watch_style  = {fontSize: 20, color: this.state.tColor, padding: 2, borderRadius: 4,};
-    const normal_style = {fontSize: 20};
+    const watch_style  = {fontWeight: "bold", fontSize: 20, color: this.props.textVisible ? bckColor : tColor,};
+    const normal_style = {fontSize: 20, color: "#696969"};
 
     return (
         <>
@@ -94,7 +70,7 @@ export class Device_Tile extends React.Component {
             </Row>
             <Row justify='space-around'>
                 <Col>
-                    <Text strong style={this.props.watch ? watch_style : normal_style}>
+                    <Text style={this.props.watch ? watch_style : normal_style}>
                         {this.props.current_data}
                     </Text>                    
                 </Col>

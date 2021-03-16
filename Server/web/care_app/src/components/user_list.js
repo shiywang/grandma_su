@@ -16,15 +16,27 @@ class UserList extends React.Component {
     super(props);
     this.state = {
       collapsed: false,
+      isTextVisible: false,
     };
 
     this.online_element_size = 1;
     this.others_element_size = 1;
   }
 
+  componentDidMount(){
+    /* This is used to blink text for items in watch list */
+    setInterval(this.blinkText, 500);
+  }
+
+  blinkText = ()=>{
+    var sLb = ! (this.state.isTextVisible);
+    this.setState({isTextVisible: sLb}); 
+  }
+
+
   render() {
-    this.online_element_size = this.props.watch_seniors.length < 50 ? 1 : 2;
-    this.others_element_size = this.props.online_seniors.length < 50 ? 1 : 2;
+    this.online_element_size = (this.props.watch_seniors.length + this.props.online_seniors.length ) < 50 ? 1 : 2;
+    this.others_element_size = this.online_element_size;
 
     return (
       <div>
@@ -45,12 +57,12 @@ class UserList extends React.Component {
                 <List
                     grid={this.online_element_size === 1 ? 
                         {gutter: 16, xs: 1, sm: 2, md: 2, lg: 2, xl: 3, xxl: 5,} : 
-                        {gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 5, xxl: 8,} 
+                        {gutter: 16, xs: 2, sm: 3, md: 5, lg: 5, xl: 8, xxl: 12,} 
                     }
                     dataSource={this.props.watch_seniors} 
 
                     renderItem={item => (
-                        <SeniorUser data={item} element_size={this.online_element_size}/>
+                        <SeniorUser data={item} element_size={this.online_element_size} textVisible={this.state.isTextVisible}/>
                     )}
                 />
              </div>
@@ -62,7 +74,7 @@ class UserList extends React.Component {
           <List
               grid={this.others_element_size === 1 ? 
                   {gutter: 16, xs: 1, sm: 2, md: 2, lg: 2, xl: 3, xxl: 5,} : 
-                  {gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 5, xxl: 8,} 
+                  {gutter: 16, xs: 2, sm: 3, md: 5, lg: 5, xl: 10, xxl: 14,} 
               }
               dataSource={this.props.online_seniors} 
 

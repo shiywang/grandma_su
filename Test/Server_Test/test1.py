@@ -15,7 +15,8 @@ UPDATE_DATA_TIMEOUT = 5
 def exit_handler():
 	print("Deleting Seniors")
 	for senior in senior_queue.queue:
-		senior_manager.delete_senior(senior)
+		pass
+		#senior_manager.delete_senior(senior)
 	print("End")
 
 
@@ -28,11 +29,8 @@ class Test1(Logger):
 		self.last_ping_time = 0
 		self.last_data_update_time = int(time.time())
 
-		for i in range(nseniors):
-			senior = None
-			while senior is None:
-				senior = senior_manager.make_senior()
-
+		tlist = senior_manager.get_senior(nseniors)
+		for senior in tlist:
 			senior_queue.put(senior)
 
 	def run(self):

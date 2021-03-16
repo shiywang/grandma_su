@@ -34,11 +34,11 @@ class Device_Types(enum.Enum):
 
 
 class Device:
-	def __init__(self, mtype, noise_amplitude=1):
+	def __init__(self, id, mtype, noise_amplitude=1):
 		self.type   = mtype
 		self.lower  = Device_Description[self.type.name]["watch_threshold_min"]
 		self.higher = Device_Description[self.type.name]["watch_threshold_max"]
-		self.id		= binascii.hexlify(bytearray(os.urandom(6))).decode('ascii').upper()
+		self.id		= id if id else binascii.hexlify(bytearray(os.urandom(6))).decode('ascii').upper()
 		self.value  = (self.lower + self.higher) / 2
 		self.noise_amplitude = noise_amplitude
 
@@ -49,15 +49,15 @@ class Device:
 
 
 class RR_Device(Device):
-	def __init__(self):
-		Device.__init__(self, Device_Types.RR, noise_amplitude=10)
+	def __init__(self, id=None):
+		Device.__init__(self, id, Device_Types.RR, noise_amplitude=10)
 
 
 class Temperature_Device(Device):
-	def __init__(self):
-		Device.__init__(self, Device_Types.TEMP, noise_amplitude=0.5)
+	def __init__(self, id=None):
+		Device.__init__(self, id, Device_Types.TEMP, noise_amplitude=0.5)
 
 
 class SPO2_Device(Device):
-	def __init__(self):
-		Device.__init__(self, Device_Types.SPO2, noise_amplitude=1)
+	def __init__(self, id=None):
+		Device.__init__(self, id, Device_Types.SPO2, noise_amplitude=1)

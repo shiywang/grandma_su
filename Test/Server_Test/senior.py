@@ -1,7 +1,8 @@
 import os 
 from random import randrange, choice
-from devices import Device, SPO2_Device, RR_Device, Temperature_Device
+from devices import Device, SPO2_Device, RR_Device, Temperature_Device, Device_Types
 from api_handler import api_handler, custom_senior_delete, custom_create_senior
+from save_data import file_manager
 from logger import Logger
 import names, time, json
 
@@ -36,6 +37,39 @@ class Senior_Manager(Logger):
 		Logger.__init__(self, "SP")
 		self.__senior_list = []
 
+	def get_senior(self, count):
+		senior_list = []
+		data_list = file_manager.read_data(count)
+		if len(data_list) == 0:
+			self.info("No saved data, Creating new data")
+			for i in range(count):
+				senior = None
+				while senior is None:
+					senior = self.make_senior()
+				senior_list.append(senior)
+
+		else:
+			self.info("Using saved data")
+			for data in data_list:
+				device = None
+				self.info(data)
+				device_id, device_type = data[:-1].split(',')
+				self.info(device_type)
+				device_type = Device_Types[device_type]
+
+				if device_type == Device_Types.SPO2:
+					device = SPO2_Device(id=device_id)
+				elif device_type == Device_Types.RR:
+					device = RR_Device(id=device_id)
+				elif device_type == Device_Types.TEMP:
+					device = Temperature_Device(id=device_id)
+
+				senior = Senior(device, {"name": "_", "age": "_", "gender": "_", })
+				senior_list.append(senior)
+
+		return senior_list
+
+
 	def make_senior(self):
 		gender  = choice(['male', 'female'])
 		device  = choice([RR_Device, Temperature_Device, SPO2_Device])()			# Online RR_Device for now
@@ -58,6 +92,7 @@ class Senior_Manager(Logger):
 		res = custom_create_senior(json.dumps(userdata))
 		if res is True:
 			senior = Senior(device, userdata)
+			file_manager.save_data(senior)
 			self.info(senior)
 			return senior
 		else:

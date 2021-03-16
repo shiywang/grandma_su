@@ -41,6 +41,7 @@
 # node modeule
 **/node_modules
 *.pyc
+data_store1.txt
 
 # NRF52 SDK exlusions
 nRF5_SDK_17.0.0/*

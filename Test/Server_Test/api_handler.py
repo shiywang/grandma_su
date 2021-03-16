@@ -4,8 +4,8 @@ import queue, threading, json
 
 api_user = "admin"
 api_password = "uched4123"
-#base_url = "http://127.0.0.1:8002/"
-base_url = "http://128.119.85.163:8002/"
+base_url = "http://127.0.0.1:8002/"
+#base_url = "http://128.119.85.163:8002/"
 request_headers = {'Content-Type': 'application/json',}
 
 class Api_Handler(threading.Thread):

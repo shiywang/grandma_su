@@ -16,13 +16,15 @@ class SeniorUser extends React.Component {
       collapsed: false,
       isModalVisible: false,
     };  
-    this.watch_style = {fontSize: 14, color: '#ff0800', padding: 2, borderRadius: 4,};
-    this.normal_style = {fontSize: 14};
   }
 
   componentDidMount(){ }
 
   senior_object = () => {
+
+    const bulk_watch_style = {fontSize: 14, fontWeight: "bold", color: this.props.textVisible ? '#ff0800' : '#dcdcdc', padding: 2, borderRadius: 4,};
+    const bulk_normal_style = {fontSize: 14, padding: 2}; 
+
     return (  
       <>{ 
       this.props.element_size === 1 ?
@@ -70,6 +72,7 @@ class SeniorUser extends React.Component {
                   current_data={this.props.data.data[ this.props.data.data.length - 1].value}
                   size={this.props.element_size}
                   watch={this.props.data.watch}
+                  textVisible={this.props.textVisible}
                 />
               </Col>
             </Row>
@@ -82,15 +85,12 @@ class SeniorUser extends React.Component {
           <Col> 
             <Avatar size={16} style={{ marginRight:0, backgroundColor: this.props.data.color}}  >{this.props.data.name[0]}</Avatar>           
           </Col>
-          <Col> 
-            <Text style={{fontSize:10, textAlign: 'center'}}> {'@'+this.props.data.device_id.substr(0, 6)} </Text> 
-          </Col>
-          <Col><Divider type="vertical" style={{height: "100%", margin: 0}} /></Col>
+          
           <Col> 
             <Text style={{fontSize: 10, textAlign: 'center'}}> 
               {this.props.data.device_type}: 
             </Text> 
-            <Text code strong style={this.props.data.watch ? this.watch_style : this.normal_style}>
+            <Text code style={this.props.data.watch ? bulk_watch_style : bulk_normal_style}>
               {this.props.data.data[ this.props.data.data.length - 1].value}
             </Text> 
           </Col>
