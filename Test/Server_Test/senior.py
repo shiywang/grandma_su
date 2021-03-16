@@ -52,9 +52,7 @@ class Senior_Manager(Logger):
 			self.info("Using saved data")
 			for data in data_list:
 				device = None
-				self.info(data)
 				device_id, device_type = data[:-1].split(',')
-				self.info(device_type)
 				device_type = Device_Types[device_type]
 
 				if device_type == Device_Types.SPO2:

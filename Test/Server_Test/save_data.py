@@ -15,7 +15,6 @@ class File_Manager:
     def read_data(self, count):
         with open (filename) as mfile:
             mlist = list(mfile)
-            print(len(mlist))
             if count > len(mlist):  # Not enough elements in list
                 return []
             slist = random.sample(mlist, count)
