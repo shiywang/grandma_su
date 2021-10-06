@@ -3,6 +3,7 @@
 *.pem
 *.key
 *.pyc
+.idea
 
 # Compiled Object files
 *.slo
