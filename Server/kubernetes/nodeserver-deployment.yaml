@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.24.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nodeserver
+  name: nodeserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nodeserver
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.24.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: nodeserver
+    spec:
+      containers:
+        - args:
+            - node
+            - middleman.js
+          image: nodeserver
+          name: nodeserver
+          ports:
+            - containerPort: 3001
+            - containerPort: 4000
+          resources: {}
+          volumeMounts:
+            - mountPath: /code
+              name: nodeserver-claim0
+      hostname: nodeserver
+      restartPolicy: Always
+      volumes:
+        - name: nodeserver-claim0
+          persistentVolumeClaim:
+            claimName: nodeserver-claim0
+status: {}
