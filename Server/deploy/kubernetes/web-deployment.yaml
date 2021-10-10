@@ -12,9 +12,6 @@ spec:
     type: Recreate
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert
-        kompose.version: 1.24.0 (HEAD)
       creationTimestamp: null
       labels:
         io.kompose.service: web
@@ -31,12 +28,12 @@ spec:
             - containerPort: 3000
           resources: {}
           stdin: true
-          volumeMounts:
-            - mountPath: /code
-              name: web-claim0
+          # volumeMounts:
+          #   - mountPath: /code
+          #     name: web-claim0
       restartPolicy: Always
-      volumes:
-        - name: web-claim0
-          persistentVolumeClaim:
-            claimName: web-claim0
+      # volumes:
+      #   - name: web-claim0
+      #     persistentVolumeClaim:
+      #       claimName: web-claim0
 status: {}

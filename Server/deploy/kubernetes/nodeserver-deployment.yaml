@@ -25,13 +25,13 @@ spec:
             - containerPort: 3001
             - containerPort: 4000
           resources: {}
-          volumeMounts:
-            - mountPath: /code
-              name: nodeserver-claim0
+          # volumeMounts:
+          #   - mountPath: /code
+          #     name: nodeserver-claim0
       hostname: nodeserver
       restartPolicy: Always
-      volumes:
-        - name: nodeserver-claim0
-          persistentVolumeClaim:
-            claimName: nodeserver-claim0
+      # volumes:
+      #   - name: nodeserver-claim0
+      #     persistentVolumeClaim:
+      #       claimName: nodeserver-claim0
 status: {}

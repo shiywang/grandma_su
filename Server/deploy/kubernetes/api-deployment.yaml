@@ -27,13 +27,13 @@ spec:
             - containerPort: 8000
             - containerPort: 5456
           resources: {}
-          volumeMounts:
-            - mountPath: /code
-              name: api-claim0
+          # volumeMounts:
+          #   - mountPath: /code
+          #     name: api-claim0
       hostname: api
       restartPolicy: Always
-      volumes:
-        - name: api-claim0
-          persistentVolumeClaim:
-            claimName: api-claim0
+      # volumes:
+      #   - name: api-claim0
+      #     persistentVolumeClaim:
+      #       claimName: api-claim0
 status: {}
