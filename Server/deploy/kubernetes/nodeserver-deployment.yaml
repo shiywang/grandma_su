@@ -7,13 +7,13 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: nodeserver
+      app: nodeserver
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        io.kompose.service: nodeserver
+        app: nodeserver
     spec:
       containers:
         - args:
@@ -21,17 +21,10 @@ spec:
             - middleman.js
           image: shiywang/nenode:latest
           name: nodeserver
+          imagePullPolicy: Always
           ports:
             - containerPort: 3001
             - containerPort: 4000
           resources: {}
-          # volumeMounts:
-          #   - mountPath: /code
-          #     name: nodeserver-claim0
       hostname: nodeserver
       restartPolicy: Always
-      # volumes:
-      #   - name: nodeserver-claim0
-      #     persistentVolumeClaim:
-      #       claimName: nodeserver-claim0
-status: {}

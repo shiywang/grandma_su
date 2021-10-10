@@ -2,23 +2,24 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    io.kompose.service: db
+    app: db
   name: db
   namespace: ne
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: db
+      app: db
   strategy: {}
   template:
     metadata:
       labels:
-        io.kompose.service: db
+        app: db
     spec:
       containers:
         - image: shiywang/nedb:latest
           name: db
+          imagePullPolicy: Always
           ports:
             - containerPort: 5432
           resources: {}

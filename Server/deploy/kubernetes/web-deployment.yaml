@@ -16,7 +16,12 @@ spec:
         app: ne
     spec:
       containers:
-          image: shiywang/neweb:latest
+        - args:
+            - npm
+            - start
+            - --prefix
+            - care_app/
+          image: shiywang/neweb:newtest
           name: web
           imagePullPolicy: Always
           ports:
