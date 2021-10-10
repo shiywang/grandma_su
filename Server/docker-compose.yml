@@ -2,12 +2,12 @@ version: "3"
 
 services:
   db:
-    image: shiywang:nedb
+    build: ./db
     ports:
       - "5432:5432" # "HOST:CONTAINER"
 
   api:
-    image: shiywang:neapi
+    build: ./api
     hostname: api
     command: python care_api/manage.py runserver 0.0.0.0:8000
     volumes:
@@ -19,7 +19,7 @@ services:
       - db
 
   nodeserver:
-    image: shiywang:nenode
+    build: ./node_server
     hostname: nodeserver
     volumes:
       - ./node_server:/code
@@ -31,7 +31,7 @@ services:
       - api
 
   web:
-    image: shiywang:neweb
+    build: ./web
     stdin_open: true
     command: npm start --prefix care_app/
     volumes:

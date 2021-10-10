@@ -6,10 +6,12 @@ metadata:
   name: web
   namespace: ne
 spec:
+  type: NodePort
   ports:
     - name: "3001"
       port: 3001
       targetPort: 3000
+      nodePort: 30007
   selector:
     io.kompose.service: web
 status:
