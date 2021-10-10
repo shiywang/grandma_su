@@ -30,7 +30,7 @@ spec:
             - start
             - --prefix
             - care_app/
-          image: shiywang:neweb
+          image: docker.io/shiywang:neweb
           name: web
           ports:
             - containerPort: 3000

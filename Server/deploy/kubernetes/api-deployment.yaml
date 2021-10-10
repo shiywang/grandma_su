@@ -30,7 +30,7 @@ spec:
             - care_api/manage.py
             - runserver
             - 0.0.0.0:8000
-          image: shiywang:neapi
+          image: docker.io/shiywang:neapi
           name: api
           ports:
             - containerPort: 8000

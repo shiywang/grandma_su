@@ -24,7 +24,7 @@ spec:
         io.kompose.service: db
     spec:
       containers:
-        - image: shiywang:nedb
+        - image: docker.io/shiywang:nedb
           name: db
           ports:
             - containerPort: 5432
