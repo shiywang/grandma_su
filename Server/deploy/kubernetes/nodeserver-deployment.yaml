@@ -1,13 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.24.0 (HEAD)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: nodeserver
   name: nodeserver
+  namespace: ne
 spec:
   replicas: 1
   selector:
@@ -17,10 +12,6 @@ spec:
     type: Recreate
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert
-        kompose.version: 1.24.0 (HEAD)
-      creationTimestamp: null
       labels:
         io.kompose.service: nodeserver
     spec:
@@ -28,7 +19,7 @@ spec:
         - args:
             - node
             - middleman.js
-          image: docker.io/shiywang:nenode
+          image: shiywang/nenode:latest
           name: nodeserver
           ports:
             - containerPort: 3001

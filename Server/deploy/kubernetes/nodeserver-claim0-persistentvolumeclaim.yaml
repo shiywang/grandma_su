@@ -1,10 +1,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  creationTimestamp: null
-  labels:
-    io.kompose.service: nodeserver-claim0
   name: nodeserver-claim0
+  namespace: ne
 spec:
   accessModes:
     - ReadWriteOnce

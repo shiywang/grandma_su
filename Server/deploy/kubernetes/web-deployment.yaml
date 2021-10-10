@@ -1,13 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.24.0 (HEAD)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: web
   name: web
+  namespace: ne
 spec:
   replicas: 1
   selector:
@@ -30,7 +25,7 @@ spec:
             - start
             - --prefix
             - care_app/
-          image: docker.io/shiywang:neweb
+          image: shiywang/neweb:latest
           name: web
           ports:
             - containerPort: 3000
