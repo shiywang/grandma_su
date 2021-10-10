@@ -21,9 +21,9 @@ spec:
             - start
             - --prefix
             - care_app/
-          image: shiywang/neweb:newtest
+          image: shiywang/neweb:latest
           name: web
-          imagePullPolicy: Always
+          # imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - containerPort: 3000
       restartPolicy: Always

@@ -21,7 +21,7 @@ spec:
             - middleman.js
           image: shiywang/nenode:latest
           name: nodeserver
-          imagePullPolicy: Always
+          # imagePullPolicy: Always
           ports:
             - containerPort: 3001
             - containerPort: 4000

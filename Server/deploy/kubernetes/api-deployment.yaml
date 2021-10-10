@@ -23,7 +23,7 @@ spec:
             - 0.0.0.0:8000
           image: shiywang/neapi:latest
           name: api
-          imagePullPolicy: Always
+          # imagePullPolicy: Always
           ports:
             - containerPort: 8000
             - containerPort: 5456
