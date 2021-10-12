@@ -16,8 +16,9 @@ spec:
       labels:
         app: db
     spec:
+      shareProcessNamespace: true
       containers:
-        - image: shiywang/nedb:latest
+        - image: nelab/nedb:latest
           name: db
           # imagePullPolicy: Always
           ports:

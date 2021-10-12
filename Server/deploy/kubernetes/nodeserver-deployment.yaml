@@ -16,10 +16,11 @@ spec:
         app: nodeserver
     spec:
       containers:
+        shareProcessNamespace: true
         - args:
             - node
             - middleman.js
-          image: shiywang/nenode:latest
+          image: nelab/nenode:latest
           name: nodeserver
           # imagePullPolicy: Always
           ports:

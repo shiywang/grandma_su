@@ -21,7 +21,7 @@ spec:
             - start
             - --prefix
             - care_app/
-          image: shiywang/neweb:latest
+          image: nelab/neweb:latest
           name: web
           # imagePullPolicy: Always
           ports:
