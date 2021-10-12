@@ -6,4 +6,5 @@
  pika
  pyzmq
  django-cors-headers
+ django-environ
  

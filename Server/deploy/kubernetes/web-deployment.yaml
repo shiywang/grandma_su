@@ -23,7 +23,6 @@ spec:
             - care_app/
           image: nelab/neweb:latest
           name: web
-          # imagePullPolicy: Always
           ports:
             - containerPort: 3000
       restartPolicy: Always

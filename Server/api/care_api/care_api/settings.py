@@ -11,9 +11,19 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def get_env_value(env_variable):
+    try:
+      	return os.environ[env_variable]
+    except KeyError:
+        error_msg = 'Set the {} environment variable'.format(var_name)
+        raise ImproperlyConfigured(error_msg)
 
 
 # Quick-start development settings - unsuitable for production
@@ -89,9 +99,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'SensorData',
         'USER': 'CHSUser1',
-        'HOST': 'db',
+        'HOST': get_env_value('DB_SERVICE_HOST'),
         'PASSWORD': 'A9EQFT6gS#LRHHwo75MRPZQl8mWaA02N&',
-        'PORT': 5432,
+        'PORT': int(get_env_value('DB_SERVICE_PORT')),
     }
 }
 
