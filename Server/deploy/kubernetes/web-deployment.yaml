@@ -7,13 +7,13 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ne
+      app: web
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: ne
+        app: web
     spec:
       containers:
         - args:

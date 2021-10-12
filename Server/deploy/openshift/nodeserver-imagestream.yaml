@@ -3,7 +3,7 @@ kind: ImageStream
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: nodeserver
+    app: nodeserver
   name: nodeserver
 spec:
   lookupPolicy:

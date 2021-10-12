@@ -3,7 +3,7 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: nodeserver
+    app: nodeserver
   name: nodeserver
 spec:
   ports:
@@ -14,6 +14,6 @@ spec:
       port: 4000
       targetPort: 4000
   selector:
-    io.kompose.service: nodeserver
+    app: nodeserver
 status:
   loadBalancer: {}

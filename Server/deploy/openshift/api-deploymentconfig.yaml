@@ -3,12 +3,12 @@ kind: DeploymentConfig
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: api
+    app: api
   name: api
 spec:
   replicas: 1
   selector:
-    io.kompose.service: api
+    app: api
   strategy:
     resources: {}
     type: Recreate
@@ -16,7 +16,7 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: api
+        app: api
     spec:
       containers:
         - args:

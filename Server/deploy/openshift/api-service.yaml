@@ -3,7 +3,7 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: api
+    app: api
   name: api
 spec:
   ports:
@@ -14,6 +14,6 @@ spec:
       port: 5456
       targetPort: 5456
   selector:
-    io.kompose.service: api
+    app: api
 status:
   loadBalancer: {}
