@@ -16,7 +16,6 @@ spec:
       labels:
         app: db
     spec:
-      shareProcessNamespace: true
       containers:
         - image: nelab/nedb:latest
           name: db
@@ -24,5 +23,4 @@ spec:
           ports:
             - containerPort: 5432
           resources: {}
-      restartPolicy: Always
 status: {}

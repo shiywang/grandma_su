@@ -15,18 +15,15 @@ spec:
       labels:
         app: api
     spec:
-      shareProcessNamespace: true
       containers:
         - args:
             - python
             - care_api/manage.py
             - runserver
             - 0.0.0.0:8000
-          image: nelab/neapi:latest
+          image: nelab/neapi:test
           name: api
-          # imagePullPolicy: Always
           ports:
             - containerPort: 8000
             - containerPort: 5456
-      hostname: api
       restartPolicy: Always
