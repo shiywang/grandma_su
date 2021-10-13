@@ -11,6 +11,6 @@ spec:
       port: 5432
       targetPort: 5432
   selector:
-    ap: db
+    app: db
 status:
   loadBalancer: {}
