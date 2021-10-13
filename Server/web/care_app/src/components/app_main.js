@@ -16,10 +16,12 @@ var randomColor = require('randomcolor'); // import the script
 
 //var home_addr = 'http://128.119.85.163';
 //var home_addr = 'http://localhost';
-var home_addr   = 'http://' + process.env.API_SERVICE_HOST;
-var socketio_server = home_addr + ':4000/';
+var api_service_host   = 'http://' + process.env.API_SERVICE_HOST;
+var node_service_host = 'http://' + process.env.NODESERVER_SERVICE_HOST;
+
+var socketio_server = node_service_host + ':4000/';
 var topic_name = "userdata";
-var api_base_url = home_addr + ":8000/";
+var api_base_url = api_service_host + ":8000/";
 
 let headers = new Headers();
 headers.append('Accept', 'application/json');
