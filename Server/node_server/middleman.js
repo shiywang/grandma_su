@@ -8,13 +8,13 @@ const zeromq_port   = 5456
 const zeromq_topic  = "userdata"
 // const hostname      = ip.address();
 
-const socketio_listen_address = '0.0.0.0'
+// const socketio_listen_address = '0.0.0.0'
 const zmq = require("zeromq")
-// var io = require('socket.io')(socketio_port);
-var io = require('socket.io');
-var server = http.createServer();
-server.listen(socketio_port, socketio_listen_address);
-io.listen(server);
+var io = require('socket.io')(socketio_port);
+// var io = require('socket.io');
+// var server = http.createServer();
+// server.listen(socketio_port, socketio_listen_address);
+// io.listen(server);
 
 async function run() {
   const sock = new zmq.Subscriber
@@ -32,7 +32,7 @@ async function run() {
   }
 }
 
-console.log(`socket.io listen on 0.0.0.0:${socketio_port}`) 
+console.log(`socket.io listen on *:${socketio_port}`) 
 //Connect to SocketIO 
 io.on('connection', function(socket) {
     console.log('A user connected');
