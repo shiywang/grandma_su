@@ -70,6 +70,8 @@ class MainApp extends React.Component {
         this.OnlineSeniors.set(key, data[key]);
       }
       this.setState({flag: !this.state.flag});  // Triggers a re-rendering
+    }).catch(err => {
+      throw new Error(err)
     });
   }
 
