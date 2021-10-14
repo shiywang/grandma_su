@@ -17,14 +17,24 @@ log = Logger("BLE")
 # API 
 api_user        = "admin"
 api_password    = "uched4123"
-base_url        = "http://127.0.0.1:8002/"
+#base_url        = "http://128.119.82.152:8002/"
+base_url = "http://shiywang.asuscomm.com:30007/"
 request_headers = {'Content-Type': 'application/json',}
 
-test_device_id      = "7E528A676931"
+test_device_id      = "FCD7EA7742CC"
 test_device_type    = "RR"
 
 
-def api_send_data(self, device_id, value, device_type):
+def send_ping():
+    data = {
+        "device_id": test_device_id,
+        "battery": 50,
+    }
+    url = base_url + "ping/"
+    r = requests.post(url, headers=request_headers, auth=(api_user, api_password), data=json.dumps(data))
+
+        
+def api_send_data(device_id, value, device_type):
     data = {
         "device_id": device_id,
         "time": int(time.time()),
@@ -53,8 +63,11 @@ class DeviceDelegate(btle.DefaultDelegate):
     def handleNotification(self, cHandle, data):
         #print(len(data))
         if data[16] == 0xA7:
-            val = (data[17] << 8) | data[18]
+            val = ((data[17] << 7))  | (data[18] & 0x7F)
             print(f"RR: {val}")
+            #print(f'High: {data[17]}')
+            #print(f'Low: {data[18]}')
+            api_send_data(test_device_id,val, test_device_type)
         #print("Received data %s " % hexlify(data))
 
 
@@ -70,6 +83,7 @@ if __name__ == "__main__":
                 dev_data = dev.getScanData()
                 dev_name = dev_data[1][2] or None
 
+                log.debug(f"Dev is {dev_name}")
                 if dev_name == TARGET_NAME:
                     log.debug("Found Mezoo Device")
                     log.debug(f"Connecting to: {dev.addr}")
@@ -82,8 +96,10 @@ if __name__ == "__main__":
                     ch = svc.getCharacteristics(NOTIFY_CHR_UUID)[0]
                     print("ch", ch)
                     periph.writeCharacteristic(ch.getHandle()+1, b"\x01\x00", True)
-
+                    send_ping()
+                    
                     while True:
+                        send_ping()
                         if periph.waitForNotifications(1.0):
                             continue
 
