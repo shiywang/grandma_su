@@ -17,8 +17,6 @@ spec:
     spec:
       containers:
         - args:
-            - API_SERVICE_HOST=$API_SERVICE_HOST
-            - NODESERVER_SERVICE_HOST=$NODESERVER_SERVICE_HOST
             - npm
             - start
             - --prefix

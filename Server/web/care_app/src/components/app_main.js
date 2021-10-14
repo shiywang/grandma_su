@@ -1,4 +1,5 @@
 import React from 'react';
+import env from "react-dotenv";
 import { Layout, Menu} from 'antd';
 import "antd/dist/antd.css";
 import {
@@ -16,8 +17,11 @@ var randomColor = require('randomcolor'); // import the script
 
 //var home_addr = 'http://128.119.85.163';
 //var home_addr = 'http://localhost';
-var api_service_host   = 'http://' + process.env.API_SERVICE_HOST;
-var node_service_host = 'http://' + process.env.NODESERVER_SERVICE_HOST;
+var api_service_host   = 'http://' + env.API_SERVICE_HOST;
+var node_service_host = 'http://' + env.NODESERVER_SERVICE_HOST;
+
+alert(env.API_SERVICE_HOST)
+alert(env.NODESERVER_SERVICE_HOST)
 
 var socketio_server = node_service_host + ':4000/';
 var topic_name = "userdata";
