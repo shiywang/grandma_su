@@ -18,10 +18,6 @@ var randomColor = require('randomcolor'); // import the script
 //var home_addr = 'http://localhost';
 var api_service_host   = 'http://' + process.env.API_SERVICE_HOST;
 var node_service_host = 'http://' + process.env.NODESERVER_SERVICE_HOST;
-console.log(api_service_host)
-console.log(node_service_host)
-alert(api_service_host)
-alert(node_service_host)
 
 var socketio_server = node_service_host + ':4000/';
 var topic_name = "userdata";
