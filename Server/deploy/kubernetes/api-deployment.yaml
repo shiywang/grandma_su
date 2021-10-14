@@ -21,7 +21,7 @@ spec:
             # - care_api/manage.py
             # - runserver
             # - 0.0.0.0:8000
-        - image: shiywang/neapi:test1
+        - image: nelab/neapi
           name: api
           ports:
             - containerPort: 8000
