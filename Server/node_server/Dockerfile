@@ -7,6 +7,7 @@ RUN npm install --quiet
 RUN npm install zeromq
 RUN npm install ip
 RUN npm install socket.io
+RUN npm install dotenv
 
+EXPOSE 4000
 EXPOSE 3000
-EXPOSE 5456

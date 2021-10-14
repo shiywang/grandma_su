@@ -15,17 +15,15 @@ const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 var randomColor = require('randomcolor'); // import the script
 
-//var home_addr = 'http://128.119.85.163';
-//var home_addr = 'http://localhost';
 var api_service_host   = 'http://' + env.API_SERVICE_HOST;
 var node_service_host = 'http://' + env.NODESERVER_SERVICE_HOST;
-
-alert(env.API_SERVICE_HOST)
-alert(env.NODESERVER_SERVICE_HOST)
 
 var socketio_server = node_service_host + ':4000/';
 var topic_name = "userdata";
 var api_base_url = api_service_host + ":8000/";
+
+alert(socketio_server)
+alert(api_base_url)
 
 let headers = new Headers();
 headers.append('Accept', 'application/json');

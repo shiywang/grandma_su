@@ -1,8 +1,9 @@
 const http = require('http');
 var ip = require("ip")
+require('dotenv').config()
 
 const socketio_port = 4000
-const zeromq_server = 'api';
+const zeromq_server = process.env.API_SERVICE_HOST;
 const zeromq_port   = 5456
 const zeromq_topic  = "userdata"
 const hostname      = ip.address();
