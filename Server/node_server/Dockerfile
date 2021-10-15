@@ -10,4 +10,3 @@ RUN npm install socket.io
 RUN npm install dotenv
 
 EXPOSE 4000
-EXPOSE 3000

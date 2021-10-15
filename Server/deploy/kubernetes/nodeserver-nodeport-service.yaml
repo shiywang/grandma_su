@@ -6,9 +6,10 @@ metadata:
   name: nodeserver
   namespace: ne
 spec:
+  type: NodePort
   ports:
-    - name: "4000"
-      port: 4000
+    - port: 4000
       targetPort: 4000
+      nodePort: 30006
   selector:
     app: nodeserver

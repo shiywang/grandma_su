@@ -6,15 +6,8 @@ const socketio_port = 4000
 const zeromq_server = process.env.API_SERVICE_HOST;
 const zeromq_port   = 5456
 const zeromq_topic  = "userdata"
-// const hostname      = ip.address();
-
-// const socketio_listen_address = '0.0.0.0'
 const zmq = require("zeromq")
 var io = require('socket.io')(socketio_port);
-// var io = require('socket.io');
-// var server = http.createServer();
-// server.listen(socketio_port, socketio_listen_address);
-// io.listen(server);
 
 async function run() {
   const sock = new zmq.Subscriber

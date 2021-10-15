@@ -22,7 +22,6 @@ spec:
           image: nelab/nenode:latest
           name: nodeserver
           ports:
-            - containerPort: 3000
             - containerPort: 4000
           resources:
             requests:

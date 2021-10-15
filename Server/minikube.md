@@ -9,4 +9,10 @@ minikube dashboard
 
 minikube addons enable registry
 
+docker-compose run api python manage.py migrate
+
+docker-compose run api python care_api/manage.py createsuperuser
+
+remember to remove datastore.txt
+
 ```

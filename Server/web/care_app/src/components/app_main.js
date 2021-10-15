@@ -15,12 +15,14 @@ const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 var randomColor = require('randomcolor'); // import the script
 
-var api_service_host   = 'http://' + env.API_SERVICE_HOST;
-var node_service_host = 'http://' + env.NODESERVER_SERVICE_HOST;
-
-var socketio_server = node_service_host + ':4000/';
+var public_url = "http://shiywang.asuscomm.com"
+// var api_service_host   = 'http://' + env.API_SERVICE_HOST;
+// var node_service_host = 'http://' + env.NODESERVER_SERVICE_HOST;
+// var socketio_server = node_service_host + ':4000/';
+// var api_base_url = api_service_host + ":8000/";
+var socketio_server = public_url + ':30006/';
 var topic_name = "userdata";
-var api_base_url = api_service_host + ":8000/";
+var api_base_url = public_url + ":30007/";
 
 alert(socketio_server)
 alert(api_base_url)
@@ -64,14 +66,14 @@ class MainApp extends React.Component {
     })
     .then((response) => response.json())
     .then((data) => {
-      for (var key  in data){
+      for (var key in data){
         data[key]["watch"] = exceeded_threshold(data[key].data[data[key].data.length - 1].value, data[key].device_type);  // determine whether to add to watch list
         data[key]["color"] = randomColor({luminosity: 'dark',});
         this.OnlineSeniors.set(key, data[key]);
       }
       this.setState({flag: !this.state.flag});  // Triggers a re-rendering
     }).catch(err => {
-      throw new Error(err)
+      console.log(err)
     });
   }
 

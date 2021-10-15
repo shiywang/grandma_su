@@ -30,7 +30,7 @@ class UserList extends React.Component {
 
   blinkText = ()=>{
     var sLb = ! (this.state.isTextVisible);
-    this.setState({isTextVisible: sLb}); 
+    this.setState({isTextVisible: sLb});
   }
 
 
