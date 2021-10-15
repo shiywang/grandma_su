@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: nodeserver
-  name: nodeserver
+  name: nodeserver-nodeport
   namespace: ne
 spec:
   type: NodePort
