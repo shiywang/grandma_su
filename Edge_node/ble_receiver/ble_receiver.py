@@ -17,14 +17,28 @@ log = Logger("BLE")
 # API 
 api_user        = "admin"
 api_password    = "uched4123"
-base_url        = "http://127.0.0.1:8002/"
+#base_url        = "http://128.119.82.152:8002/"
+base_url        = "http://172.24.41.112:8002/"
+#base_url = "http://shiywang.asuscomm.com:30007/"
 request_headers = {'Content-Type': 'application/json',}
 
-test_device_id      = "7E528A676931"
+#test_device_id      = "FCD7EA7742CC";
+test_device_id      = "2A648758F3D3";
 test_device_type    = "RR"
 
 
-def api_send_data(self, device_id, value, device_type):
+def send_ping():
+    data = {
+        "device_id": test_device_id,
+        "battery": 50,
+    }
+    url = base_url + "ping/"
+    r = requests.post(url, headers=request_headers, auth=(api_user, api_password), data=json.dumps(data))
+    #print("in function send_ping")
+    #print(r)
+
+        
+def api_send_data(device_id, value, device_type):
     data = {
         "device_id": device_id,
         "time": int(time.time()),
@@ -32,6 +46,9 @@ def api_send_data(self, device_id, value, device_type):
     }
     url = base_url + "sensordata/" + device_type + '/'
     r = requests.post(url, headers=request_headers, auth=(api_user, api_password), data=json.dumps(data))
+    print("---------------------")
+    print(r)
+    print("---------------------")
 
      
 class ScanDelegate(btle.DefaultDelegate):
@@ -53,8 +70,11 @@ class DeviceDelegate(btle.DefaultDelegate):
     def handleNotification(self, cHandle, data):
         #print(len(data))
         if data[16] == 0xA7:
-            val = (data[17] << 8) | data[18]
-            print(f"RR: {val}")
+            val = ((data[17] << 7))  | (data[18] & 0x7F)
+            #print(f"RR: {val}")
+            #print(f'High: {data[17]}')
+            #print(f'Low: {data[18]}')
+            api_send_data(test_device_id, val, test_device_type)
         #print("Received data %s " % hexlify(data))
 
 
@@ -69,7 +89,7 @@ if __name__ == "__main__":
             try:
                 dev_data = dev.getScanData()
                 dev_name = dev_data[1][2] or None
-
+                log.debug(dev_data)
                 if dev_name == TARGET_NAME:
                     log.debug("Found Mezoo Device")
                     log.debug(f"Connecting to: {dev.addr}")
@@ -82,14 +102,17 @@ if __name__ == "__main__":
                     ch = svc.getCharacteristics(NOTIFY_CHR_UUID)[0]
                     print("ch", ch)
                     periph.writeCharacteristic(ch.getHandle()+1, b"\x01\x00", True)
-
+                    
                     while True:
+                        #log.debug("in loop1")
+                        send_ping()
                         if periph.waitForNotifications(1.0):
+                            #log.debug("in loop2")
                             continue
 
             except Exception as e:
                 pass
-                #print(e)
+                print(e)
 
         time.sleep(2)
 

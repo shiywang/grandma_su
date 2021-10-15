@@ -13,12 +13,7 @@ RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN /usr/local/bin/python3 -m pip install --upgrade pip
 COPY . /code/
 RUN pip install -r requirements.txt
-RUN chmod a+x /code/docker-entrypoint.sh
 
-
-ENTRYPOINT ["/code/docker-entrypoint.sh"]
-CMD ["python", "care_api/manage.py", "runserver", "0.0.0.0:8000"]
-
-
-
-
+# RUN chmod +x /code/entrypoint.sh
+# ENTRYPOINT ["/code/entrypoint.sh"]
+# CMD ["/code/entrypoint.sh"]
