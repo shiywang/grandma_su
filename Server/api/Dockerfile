@@ -1,4 +1,4 @@
-FROM python:3
+FROM fedeg/python-vim
 WORKDIR /code
 
 ENV PYTHONUNBUFFERED 1
@@ -14,6 +14,6 @@ RUN /usr/local/bin/python3 -m pip install --upgrade pip
 COPY . /code/
 RUN pip install -r requirements.txt
 
-# RUN chmod +x /code/entrypoint.sh
-# ENTRYPOINT ["/code/entrypoint.sh"]
-# CMD ["/code/entrypoint.sh"]
+RUN chmod +x /code/entrypoint.sh
+ENTRYPOINT ["/code/entrypoint.sh"]
+CMD ["/code/entrypoint.sh"]
