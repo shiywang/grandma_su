@@ -1,6 +1,12 @@
 import os
 from device_manager.manager import onlineSeniorsManager, onlineSeniorsDict
 
+
+class DataMediumFake:
+    def __init__(self):
+        pass
+
+
 class DataMedium:
     def __init__(self):
         self.start()
@@ -38,4 +44,7 @@ class DataMedium:
         pass 
 
 
-dataMedium = DataMedium()
+if "SKIP_ZEROMQ" not in os.environ:
+    dataMedium = DataMedium()
+else:
+    dataMedium = DataMediumFake()
