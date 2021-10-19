@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: postgresql-db
-          image: postgres:latest
+          image: nelab/nedb:latest
           volumeMounts:
             - name: postgresql-db-disk
               mountPath: /data
