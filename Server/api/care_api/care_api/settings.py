@@ -99,11 +99,21 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'SensorData',
         'USER': 'CHSUser1',
-        'HOST': get_env_value('DB_SERVICE_HOST'),
+        'HOST': get_env_value('POSTGRES_DB_SVC_SERVICE_HOST'),
         'PASSWORD': 'A9EQFT6gS#LRHHwo75MRPZQl8mWaA02N&',
-        'PORT': int(get_env_value('DB_SERVICE_PORT')),
+        'PORT': int(get_env_value('POSTGRES_DB_SVC_SERVICE_PORT')),
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'SensorData',
+#         'USER': 'CHSUser1',
+#         'HOST': get_env_value('DB_SERVICE_HOST'),
+#         'PASSWORD': 'A9EQFT6gS#LRHHwo75MRPZQl8mWaA02N&',
+#         'PORT': int(get_env_value('DB_SERVICE_PORT')),
+#     }
+# }
 
 
 # Password validation
