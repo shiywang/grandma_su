@@ -31,7 +31,6 @@ base_url = "http://shiywang.asuscomm.com:30007/"
 test_device_id      = "2A648758F3D3"
 test_device_type    = "RR"
 
-
 def send_ping():
     data = {
         "device_id": test_device_id,
