@@ -37,6 +37,7 @@ DEBUG = True
 
 #ALLOWED_HOSTS = []
 
+# SECURE_SSL_REDIRECT = True
 
 # Application definition
 
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'data_api',
+    'sslserver',
 ]
 
 MIDDLEWARE = [

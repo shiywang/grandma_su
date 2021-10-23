@@ -4,6 +4,7 @@ from binascii import hexlify
 import time, uuid, json, requests
 from logger import Logger
 from enum import Enum
+import threading
 
 # Definitions   
 BASE_UUID       =  uuid.UUID('6E400000-B5A3-F393-E0A9-E50E24DCCA9E') # never used
@@ -96,42 +97,44 @@ class DeviceDelegate(btle.DefaultDelegate):
             print("Received data %s " % hexlify(data))
 
 
+def device_handler(devices):
+    for dev in devices:
+        try:
+            dev_data = dev.getScanData()
+            dev_name = dev_data[1][2] or None
+            log.debug(dev_data)
+            if dev_name == TARGET_NAME:
+                log.debug("Found Mezoo Device")
+                log.debug(f"Connecting to: {dev.addr}")
+            
+                periph = btle.Peripheral(dev, "random")     # supply scan entry as arg
+                periph.setDelegate(DeviceDelegate())
+
+                # Setup to turn notifications on
+                svc = periph.getServiceByUUID(SERVICE_UUID)
+                ch = svc.getCharacteristics(NOTIFY_CHR_UUID)[0]
+                print("ch", ch)
+                periph.writeCharacteristic(ch.getHandle()+1, b"\x01\x00", True)
+                
+                while True:
+                    #log.debug("in loop1")
+                    send_ping()
+                    if periph.waitForNotifications(1.0):
+                        #log.debug("in loop2")
+                        continue
+
+        except Exception as e:
+            pass
+            print(e)
 
 if __name__ == "__main__":
     log.debug("Starting BLE Receiver")
     scanner = btle.Scanner().withDelegate(ScanDelegate())
-
+    
     while True:
         devices = scanner.scan(5.0, passive=True)
-        for dev in devices:
-            try:
-                dev_data = dev.getScanData()
-                dev_name = dev_data[1][2] or None
-                log.debug(dev_data)
-                if dev_name == TARGET_NAME:
-                    log.debug("Found Mezoo Device")
-                    log.debug(f"Connecting to: {dev.addr}")
-                
-                    periph = btle.Peripheral(dev, "random")     # supply scan entry as arg
-                    periph.setDelegate(DeviceDelegate())
-
-                    # Setup to turn notifications on
-                    svc = periph.getServiceByUUID(SERVICE_UUID)
-                    ch = svc.getCharacteristics(NOTIFY_CHR_UUID)[0]
-                    print("ch", ch)
-                    periph.writeCharacteristic(ch.getHandle()+1, b"\x01\x00", True)
-                    
-                    while True:
-                        #log.debug("in loop1")
-                        send_ping()
-                        if periph.waitForNotifications(1.0):
-                            #log.debug("in loop2")
-                            continue
-
-            except Exception as e:
-                pass
-                print(e)
-
+        handler = threading.Thread(target=device_handler, args=(devices,), daemon=True)
+        handler.start()
         time.sleep(2)
 
 '''
