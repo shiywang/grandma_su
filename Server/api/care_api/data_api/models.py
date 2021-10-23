@@ -95,7 +95,7 @@ class RR(Sensor_Data):
 
 
 class Temp(Sensor_Data):
-	type 	= Sensor_Data.TEMP 
+	type 	= Sensor_Data.TEMP
 	
 	@classmethod
 	def get_serializer(cls):
@@ -127,8 +127,8 @@ class SPO2(Sensor_Data):
 			device_id = serializers.CharField(write_only=True)
 			senior_id = serializers.CharField(read_only=True, source='senior.device_id')
 
-			class Meta: 
-				model = SPO2 
+			class Meta:
+				model = SPO2
 				fields = ['device_id', 'senior_id', 'time', 'value']
 
 			def create(self, validated_data):

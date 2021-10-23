@@ -3,25 +3,28 @@ from bluepy import btle
 from binascii import hexlify
 import time, uuid, json, requests
 from logger import Logger
-
+from enum import Enum
 
 # Definitions 
 SERVICE_UUID   = uuid.UUID('6E400001-B5A3-F393-E0A9-E50E24DCCA9E')
 WRITE_CHR_UUID = uuid.UUID('6E400002-B5A3-F393-E0A9-E50E24DCCA9E')
 NOTIFY_CHR_UUID = uuid.UUID('6E400003-B5A3-F393-E0A9-E50E24DCCA9E')
 TARGET_NAME  = 'MZB24C20R(A)'
+class DeviceType(str, Enum):
+    RR = 'RR'
+    TEMP = 'TEMP'
+    SPO2 = 'SPO2'
+
+
 device_list = []
 log = Logger("BLE")
-
-
+request_headers = {'Content-Type': 'application/json',}
 # API 
 api_user        = "admin"
 api_password    = "uched4123"
 #base_url        = "http://128.119.82.152:8002/"
-base_url        = "http://172.24.41.112:8002/"
-#base_url = "http://shiywang.asuscomm.com:30007/"
-request_headers = {'Content-Type': 'application/json',}
-
+#base_url        = "http://172.24.41.112:8002/"
+base_url = "http://shiywang.asuscomm.com:30007/"
 #test_device_id      = "FCD7EA7742CC";
 test_device_id      = "2A648758F3D3";
 test_device_type    = "RR"
@@ -69,13 +72,27 @@ class DeviceDelegate(btle.DefaultDelegate):
 
     def handleNotification(self, cHandle, data):
         #print(len(data))
+        parse_package = lambda data : ((data[17] << 7))  | (data[18] & 0x7F)
         if data[16] == 0xA7:
-            val = ((data[17] << 7))  | (data[18] & 0x7F)
-            #print(f"RR: {val}")
+            val = parse_package(data)
+            print(f"RRI: {val}")
             #print(f'High: {data[17]}')
             #print(f'Low: {data[18]}')
-            api_send_data(test_device_id, val, test_device_type)
-        #print("Received data %s " % hexlify(data))
+            api_send_data(test_device_id, val, DeviceType.RR)
+        elif data[16] == 0xAB:
+            val = parse_package(data)
+            print(f"Temperature: {val}")
+            api_send_data(test_device_id, val, DeviceType.TEMP)
+        elif data[16] == 0x92:
+            val = parse_package(data)
+            print(f"Heart Rate: {val}")
+            print("No support API yet send to server")
+        elif data[16] == 0x9D:
+            val = parse_package(data)
+            print(f"Battery check: {val}")
+            print("No support API yet send to server")
+        else:
+            print("Received data %s " % hexlify(data))
 
 
 

@@ -24,8 +24,6 @@ var socketio_server = public_url + ':30006/';
 var topic_name = "userdata";
 var api_base_url = public_url + ":30007/";
 
-alert(socketio_server)
-alert(api_base_url)
 
 let headers = new Headers();
 headers.append('Accept', 'application/json');
