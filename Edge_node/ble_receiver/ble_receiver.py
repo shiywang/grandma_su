@@ -61,7 +61,6 @@ class ScanDelegate(btle.DefaultDelegate):
         btle.DefaultDelegate.__init__(self)
 
     def handleDiscovery(self, dev, isNewDev, isNewData):
-        return
         if isNewDev:
             print("Discovered device", dev.addr)
         elif isNewData:
@@ -101,8 +100,12 @@ def device_handler(devices):
     for dev in devices:
         try:
             dev_data = dev.getScanData()
+            if len(dev_data) < 2 and len(dev_data[1]) < 3:
+                print("dev_data is too short, not Mezoo device")
+                log.debug(dev_data)
+                return
+
             dev_name = dev_data[1][2] or None
-            log.debug(dev_data)
             if dev_name == TARGET_NAME:
                 log.debug("Found Mezoo Device")
                 log.debug(f"Connecting to: {dev.addr}")
@@ -117,15 +120,15 @@ def device_handler(devices):
                 periph.writeCharacteristic(ch.getHandle()+1, b"\x01\x00", True)
                 
                 while True:
-                    #log.debug("in loop1")
                     send_ping()
                     if periph.waitForNotifications(1.0):
-                        #log.debug("in loop2")
                         continue
+            else:
+                print("other bluetooth device ignore it")
 
         except Exception as e:
-            pass
             print(e)
+            pass
 
 if __name__ == "__main__":
     log.debug("Starting BLE Receiver")
@@ -133,8 +136,9 @@ if __name__ == "__main__":
     
     while True:
         devices = scanner.scan(5.0, passive=True)
-        handler = threading.Thread(target=device_handler, args=(devices,), daemon=True)
-        handler.start()
+        if devices is not None:
+            handler = threading.Thread(target=device_handler, args=(devices,), daemon=True)
+            handler.start()
         time.sleep(2)
 
 '''
