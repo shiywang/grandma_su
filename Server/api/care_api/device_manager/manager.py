@@ -114,6 +114,9 @@ class Online_Seniors_Manager(threading.Thread):
 
 		# Send to Node server
 		data["command"] = "data"
+		print("-----------------------------------")
+		print(data)
+		print("-----------------------------------")
 		zeroMQManager.send(data)
 
 

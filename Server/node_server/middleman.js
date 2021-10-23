@@ -19,7 +19,7 @@ async function run() {
   for await (const [topic, msg] of sock) {
     data = topic.toString().slice(zeromq_topic.length).trim()
     console.log(data)
-
+    console.log(msg)
     data = JSON.parse(data)
     io.emit(zeromq_topic, data)         // Send to socket.io
   }
@@ -28,10 +28,11 @@ async function run() {
 console.log(`socket.io listen on *:${socketio_port}`) 
 //Connect to SocketIO 
 io.on('connection', function(socket) {
-    console.log('A user connected');
+    console.log('A user connected, socket is: ', socket);
 })
 
 process.on('SIGINT', () => {
+    console.log('SIGINT')
     process.exit(1);
 })
 

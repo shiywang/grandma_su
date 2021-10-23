@@ -12,6 +12,7 @@ class ZeroMQ_ManagerFake():
         pass
 
     def send(self, data):
+        print('pretend sending it....')
         pass
 
 
@@ -28,6 +29,7 @@ class ZeroMQ_Manager():
         try:
             self.socket.send_string("%s %s" % (self.data_topic, json.dumps(data)))
         except Exception as e:
+            print(e)
             pass
 
 
