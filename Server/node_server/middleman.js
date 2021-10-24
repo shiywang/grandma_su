@@ -36,7 +36,7 @@ async function run() {
   }
 }
 
-console.log(`socket.io listen on *:${socketio_port}`) 
+console.log(`https socket.io listen on *:${socketio_port}`) 
 //Connect to SocketIO 
 io.on('connection', function(socket) {
     console.log('A user connected, socket is: ', socket);
