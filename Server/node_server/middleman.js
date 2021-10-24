@@ -7,7 +7,18 @@ const zeromq_server = process.env.API_SERVICE_HOST;
 const zeromq_port   = 5456
 const zeromq_topic  = "userdata"
 const zmq = require("zeromq")
-var io = require('socket.io')(socketio_port);
+
+var app = require('express')();
+var https = require('https');
+var fs = require( 'fs' );
+var io = require('socket.io')(server);
+var server = https.createServer({ 
+  key: fs.readFileSync('../api/cert_key/key.pem'),
+  cert: fs.readFileSync('../api/cert_key/cert.pem')
+}, app);
+
+server.listen(socketio_port);
+// var io = require('socket.io')(socketio_port);
 
 async function run() {
   const sock = new zmq.Subscriber
