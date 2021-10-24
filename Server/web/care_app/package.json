@@ -27,7 +27,7 @@
     "zeromq": "^6.0.0-beta.6"
   },
   "scripts": {
-    "start": "react-dotenv && react-scripts start",
+    "start": "react-dotenv && HTTPS=true SSL_CRT_FILE=/code/cert_key/cert.pem SSL_KEY_FILE=/code/cert_key/key.pem react-scripts start",
     "build": "react-dotenv && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
