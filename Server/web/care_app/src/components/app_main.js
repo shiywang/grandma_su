@@ -15,7 +15,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 var randomColor = require('randomcolor'); // import the script
 
-var public_url = "http://shiywang.asuscomm.com"
+var public_url = "https://shiywang.asuscomm.com"
 // var api_service_host   = 'http://' + env.API_SERVICE_HOST;
 // var node_service_host = 'http://' + env.NODESERVER_SERVICE_HOST;
 // var socketio_server = node_service_host + ':4000/';
