@@ -12,6 +12,7 @@ COPY . /code/
 #RUN yarn @fortawesome/fontawesome-svg-core
 RUN npm install react
 RUN npm install -g npm@7.5.3 --silent
+# RUN npm install -g npm --silent
 RUN npm install socket.io-client
 RUN npm install -g react-scripts
 # RUN npm install dotenv
