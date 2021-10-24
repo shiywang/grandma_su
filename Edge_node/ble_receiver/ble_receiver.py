@@ -27,7 +27,7 @@ api_user        = "admin"
 api_password    = "uched4123"
 #base_url        = "http://128.119.82.152:8002/"
 #base_url        = "http://172.24.41.112:8002/"
-base_url = "http://shiywang.asuscomm.com:30007/"
+base_url = "https://shiywang.asuscomm.com:30007/"
 #test_device_id      = "FCD7EA7742CC";
 test_device_id      = "2A648758F3D3"
 test_device_type    = "RR"
@@ -51,9 +51,9 @@ def api_send_data(device_id, value, device_type):
     }
     url = base_url + "sensordata/" + device_type + '/'
     r = requests.post(url, headers=request_headers, auth=(api_user, api_password), data=json.dumps(data))
-    print("---------------------")
-    print(r)
-    print("---------------------")
+    # print("---------------------")
+    # print(r)
+    # print("---------------------")
 
      
 class ScanDelegate(btle.DefaultDelegate):
@@ -61,10 +61,11 @@ class ScanDelegate(btle.DefaultDelegate):
         btle.DefaultDelegate.__init__(self)
 
     def handleDiscovery(self, dev, isNewDev, isNewData):
-        if isNewDev:
-            print("Discovered device", dev.addr)
-        elif isNewData:
-            print("Received new data from", dev.addr)
+        pass
+        # if isNewDev:
+        #     print("Discovered device", dev.addr)
+        # elif isNewData:
+        #     print("Received new data from", dev.addr)
 
 class DeviceDelegate(btle.DefaultDelegate):
     def __init__(self):
@@ -124,7 +125,8 @@ def device_handler(devices):
                     if periph.waitForNotifications(1.0):
                         continue
             else:
-                print("other bluetooth device ignore it")
+                pass
+                # print("other bluetooth device ignore it")
 
         except Exception as e:
             print(e)
