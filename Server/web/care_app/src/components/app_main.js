@@ -22,7 +22,7 @@ var wss_url = "wss://shiywang.asuscomm.com"
 // var node_service_host = 'http://' + env.NODESERVER_SERVICE_HOST;
 // var socketio_server = node_service_host + ':4000/';
 // var api_base_url = api_service_host + ":8000/";
-var socketio_server = wss_url + ':30006/';
+var socketio_server = http_public_url + ':30006/';
 var topic_name = "userdata";
 var api_base_url = https_public_url + ":30007/";
 
