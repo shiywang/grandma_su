@@ -15,14 +15,15 @@ const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 var randomColor = require('randomcolor'); // import the script
 
-var public_url = "https://shiywang.asuscomm.com"
+var https_public_url = "https://shiywang.asuscomm.com"
+var http_public_url = "http://shiywang.asuscomm.com"
 // var api_service_host   = 'http://' + env.API_SERVICE_HOST;
 // var node_service_host = 'http://' + env.NODESERVER_SERVICE_HOST;
 // var socketio_server = node_service_host + ':4000/';
 // var api_base_url = api_service_host + ":8000/";
-var socketio_server = public_url + ':30006/';
+var socketio_server = http_public_url + ':30006/';
 var topic_name = "userdata";
-var api_base_url = public_url + ":30007/";
+var api_base_url = https_public_url + ":30007/";
 
 
 let headers = new Headers();
