@@ -17,11 +17,12 @@ var randomColor = require('randomcolor'); // import the script
 
 var https_public_url = "https://shiywang.asuscomm.com"
 var http_public_url = "http://shiywang.asuscomm.com"
+var wss_url = "wss://shiywang.asuscomm.com"
 // var api_service_host   = 'http://' + env.API_SERVICE_HOST;
 // var node_service_host = 'http://' + env.NODESERVER_SERVICE_HOST;
 // var socketio_server = node_service_host + ':4000/';
 // var api_base_url = api_service_host + ":8000/";
-var socketio_server = https_public_url + ':30006/';
+var socketio_server = wss_url + ':30006/';
 var topic_name = "userdata";
 var api_base_url = https_public_url + ":30007/";
 
