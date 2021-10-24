@@ -133,13 +133,14 @@ def device_handler(devices):
 if __name__ == "__main__":
     log.debug("Starting BLE Receiver")
     scanner = btle.Scanner().withDelegate(ScanDelegate())
-    
+    # try:
     while True:
         devices = scanner.scan(5.0, passive=True)
-        if devices is not None:
-            handler = threading.Thread(target=device_handler, args=(devices,), daemon=True)
-            handler.start()
+        handler = threading.Thread(target=device_handler, args=(devices,), daemon=True)
+        handler.start()
         time.sleep(2)
+    # except Exception as e:
+        # pass
 
 '''
 # Main loop --------
