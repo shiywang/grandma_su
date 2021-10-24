@@ -13,8 +13,8 @@ var https = require('https');
 var fs = require( 'fs' );
 var io = require('socket.io')(server);
 var server = https.createServer({ 
-  key: fs.readFileSync('/code/cert_key/key.pem'),
-  cert: fs.readFileSync('/code//cert_key/cert.pem')
+  key: fs.readFileSync('./cert_key/key.pem'),
+  cert: fs.readFileSync('./cert_key/cert.pem')
 }, app);
 
 server.listen(socketio_port);
