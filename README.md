@@ -47,6 +47,13 @@ Once PostgreSQL statefulsets are good, then deploy api and node and web
 kubectl apply -f Server/deploy/kubernetes/
 ```
 
+## How to add seniors and devices
+
+First login Django backend https://shiywang.asuscomm.com:30007/ click top right login button
+
+[](image/login.png)
+
+
 ## How to run stimulation tests
 
 after succesfully configed all the services.
