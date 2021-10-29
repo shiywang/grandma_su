@@ -22,7 +22,7 @@ server.listen(socketio_port);
 
 async function run() {
   const sock = new zmq.Subscriber
- 
+  console.log("**Socket.IO Version: "+io.version);
   sock.connect(`tcp://${zeromq_server}:${zeromq_port}`)
   sock.subscribe(zeromq_topic)
   console.log(`ZMQ sub connected to ${zeromq_server}:${zeromq_port}`);

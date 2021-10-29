@@ -57,13 +57,13 @@ class MainApp extends React.Component {
   }
 
   componentDidMount(){
-    const fs = require("fs");
-    const socket = require("socket.io-client")(socketio_server, {
-      ca: fs.readFileSync("./cert_key/isrgrootx1.pem")
-    });
-
-
+    // const fs = require("fs");
+    // const socket = require("socket.io-client")(socketio_server, {
+    //   ca: fs.readFileSync("./cert_key/isrgrootx1.pem")
+    // });
+    
     // let socket = io(socketio_server, {transports: ['websocket', 'polling', 'flashsocket']});
+    let socket = io(socketio_server, {transports: ['websocket', 'polling']});
     socket.on(topic_name, this.socket_cb);
 
     fetch(api_base_url + 'get-online-seniors/', {
