@@ -15,5 +15,5 @@ RUN npm install -g npm@7.5.3 --silent
 # RUN npm install -g npm --silent
 RUN npm install socket.io-client
 RUN npm install -g react-scripts
-# RUN npm install dotenv
+
 RUN cd /code/care_app/; yarn install

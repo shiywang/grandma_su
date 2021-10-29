@@ -22,7 +22,7 @@ var wss_url = "wss://shiywang.asuscomm.com"
 // var node_service_host = 'http://' + env.NODESERVER_SERVICE_HOST;
 // var socketio_server = node_service_host + ':4000/';
 // var api_base_url = api_service_host + ":8000/";
-var socketio_server = http_public_url + ':30006/';
+var socketio_server = https_public_url + ':30006/';
 var topic_name = "userdata";
 var api_base_url = https_public_url + ":30007/";
 
@@ -57,7 +57,13 @@ class MainApp extends React.Component {
   }
 
   componentDidMount(){
-    let socket = io(socketio_server, {transports: ['websocket', 'polling', 'flashsocket']});
+    const fs = require("fs");
+    const socket = require("socket.io-client")(socketio_server, {
+      ca: fs.readFileSync("./cert_key/isrgrootx1.pem")
+    });
+
+
+    // let socket = io(socketio_server, {transports: ['websocket', 'polling', 'flashsocket']});
     socket.on(topic_name, this.socket_cb);
 
     fetch(api_base_url + 'get-online-seniors/', {
