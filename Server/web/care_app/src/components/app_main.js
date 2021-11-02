@@ -10,6 +10,7 @@ import {
 import UserList from './user_list.js'
 import io from 'socket.io-client'
 import {exceeded_threshold} from './device_type.js'
+import WSClient from './websocket.js'
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -136,9 +137,12 @@ class MainApp extends React.Component {
             <Menu.Item key="3" icon={<UserOutlined />}>
               Add New User
             </Menu.Item>
+            <Menu.Item key="4" icon={<WSClient/>}>
+              WebSocket
+            </Menu.Item>
           </Menu>
         </Sider>
-
+        
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }} />
           <Content style={{ margin: '0 16px' }}>
@@ -151,7 +155,6 @@ class MainApp extends React.Component {
           </Content>
           <Footer style={{ textAlign: 'center' }}>NE Lab ©2021 Umass Amherst</Footer>
         </Layout>
-
       </Layout>
     );
   }
