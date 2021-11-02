@@ -42,6 +42,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -86,6 +87,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'care_api.wsgi.application'
 
+ASGI_APPLICATION = 'care_api.asgi.application'
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -96,16 +99,24 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'SensorData',
+#         'USER': 'CHSUser1',
+#         'HOST': get_env_value('POSTGRES_DB_SVC_SERVICE_HOST'),
+#         'PASSWORD': 'A9EQFT6gS#LRHHwo75MRPZQl8mWaA02N&',
+#         'PORT': int(get_env_value('POSTGRES_DB_SVC_SERVICE_PORT')),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'SensorData',
-        'USER': 'CHSUser1',
-        'HOST': get_env_value('POSTGRES_DB_SVC_SERVICE_HOST'),
-        'PASSWORD': 'A9EQFT6gS#LRHHwo75MRPZQl8mWaA02N&',
-        'PORT': int(get_env_value('POSTGRES_DB_SVC_SERVICE_PORT')),
     }
 }
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',

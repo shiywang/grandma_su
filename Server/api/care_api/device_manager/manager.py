@@ -2,6 +2,7 @@ import os, time, copy
 import threading, queue
 from device_manager.zeromq_lib import zeroMQManager
 from data_api.models import Senior
+from device_manager.sensor_data_ws import sensorDataConsumer
 
 DEVICE_TIMEOUT = 60 * 5
 MAX_DATA_ARRAY_LEN = 10
@@ -42,7 +43,8 @@ class Online_Seniors_Manager(threading.Thread):
 			"device_id": device_id,
 			"command"  : "offline",
 		}
-		zeroMQManager.send(data)
+		# zeroMQManager.send(data)
+		sensorDataConsumer.send(data)
 
 
 	'''
@@ -81,7 +83,8 @@ class Online_Seniors_Manager(threading.Thread):
 					
 				# Send to Node server, only for new devices
 				data["command"] = "ping" 
-				zeroMQManager.send(data)
+				# zeroMQManager.send(data)
+				sensorDataConsumer.send(data)
 
 			except Exception as e:
 				pass 
@@ -117,7 +120,8 @@ class Online_Seniors_Manager(threading.Thread):
 		print("-----------------------------------")
 		print(data)
 		print("-----------------------------------")
-		zeroMQManager.send(data)
+		# zeroMQManager.send(data)
+		sensorDataConsumer.send(data)
 
 
 	'''
@@ -133,7 +137,8 @@ class Online_Seniors_Manager(threading.Thread):
 				if current_time - last_time > DEVICE_TIMEOUT:	# Ping has not be recieved
 					data = {"device_id": key, "command": "offline" }
 					del online_seniors[key]
-					zeroMQManager.send(data)					# Send through rabbit channel
+					# zeroMQManager.send(data)					# Send through rabbit channel
+					sensorDataConsumer.send(data)
 
 
 	def run(self):

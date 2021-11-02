@@ -1,7 +1,6 @@
 import json
 import os
 import zmq
-from threading import Thread, RLock
 
 ZEROMQ_SERVER = "0.0.0.0"
 ZEROMQ_PORT = "5456"
