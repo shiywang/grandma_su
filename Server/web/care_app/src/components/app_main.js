@@ -62,10 +62,9 @@ class MainApp extends React.Component {
     // const socket = require("socket.io-client")(socketio_server, {
     //   ca: fs.readFileSync("./cert_key/isrgrootx1.pem")
     // });
-    
     // let socket = io(socketio_server, {transports: ['websocket', 'polling', 'flashsocket']});
-    let socket = io(socketio_server, {transports: ['websocket', 'polling']});
-    socket.on(topic_name, this.socket_cb);
+    // let socket = io(socketio_server, {transports: ['websocket', 'polling']});
+    // socket.on(topic_name, this.socket_cb);
 
     fetch(api_base_url + 'get-online-seniors/', {
         method: 'GET',
@@ -147,6 +146,10 @@ class MainApp extends React.Component {
           <Header className="site-layout-background" style={{ padding: 0 }} />
           <Content style={{ margin: '0 16px' }}>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+              <UserList 
+                online_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == false)}
+                watch_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == true)}
+              />
               <UserList 
                 online_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == false)}
                 watch_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == true)}

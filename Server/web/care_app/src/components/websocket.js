@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import React, { Component } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 
@@ -9,6 +10,14 @@ class WSClient extends Component {
       console.log('WebSocket Client Connected');
     };
     client.onmessage = (message) => {
+      alert(message)
+      console.log(message);
+    };
+    
+    client.onclose = (message) => {
+      console.log(message);
+    };
+    client.onerror = (message) => {
       console.log(message);
     };
   }
@@ -16,7 +25,7 @@ class WSClient extends Component {
   render() {
     return (
       <div>
-        Practical Intro To WebSockets.
+        
       </div>
     );
   }

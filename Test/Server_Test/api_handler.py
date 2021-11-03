@@ -2,9 +2,12 @@ import os
 import requests
 import queue, threading, json
 
-api_user = "admin"
-api_password = "uched4123"
-base_url = "http://127.0.0.1:8002/"
+#api_user = "admin"
+#api_password = "uched4123"
+
+api_user = "test"
+api_password = "test"
+base_url = "http://127.0.0.1:8000/"
 #base_url = "http://128.119.85.163:8002/"
 request_headers = {'Content-Type': 'application/json',}
 
