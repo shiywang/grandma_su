@@ -150,7 +150,7 @@ class MainApp extends React.Component {
                 online_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == false)}
                 watch_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == true)}
               />
-              <UserList 
+              <UserList
                 online_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == false)}
                 watch_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == true)}
               />
