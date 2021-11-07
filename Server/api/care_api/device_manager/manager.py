@@ -3,6 +3,8 @@ import threading, queue
 from device_manager.zeromq_lib import zeroMQManager
 from data_api.models import Senior
 from device_manager.sensor_data_ws import sensorDataConsumer
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 DEVICE_TIMEOUT = 60 * 5
 MAX_DATA_ARRAY_LEN = 10
@@ -14,7 +16,7 @@ class Online_Seniors(dict):
 
 	def __enter__(self):
 		self.__lock.acquire()
-		return self 
+		return self
 
 	def __exit__(self, type, value, traceback):
 		self.__lock.release()
@@ -43,8 +45,16 @@ class Online_Seniors_Manager(threading.Thread):
 			"device_id": device_id,
 			"command"  : "offline",
 		}
+		channel_layer = get_channel_layer()
+		async_to_sync(channel_layer.group_send)(
+			'event_sharif',
+			{
+				'type': 'send_message_to_frontend',
+				'message': data
+			}
+		)
 		# zeroMQManager.send(data)
-		sensorDataConsumer.send(data)
+		# sensorDataConsumer.send(data)
 
 
 	'''
@@ -60,7 +70,7 @@ class Online_Seniors_Manager(threading.Thread):
 		data 		 = copy.deepcopy(data_r)		# Create deep copy that we can modify
 		data["time"] = int(time.time())		# Assign new unix time
 		device_id 	 = data.get("device_id")
-		
+
 		# Device already in list
 		if device_id in onlineSeniorsDict:
 			with onlineSeniorsDict as online_seniors:
@@ -74,22 +84,31 @@ class Online_Seniors_Manager(threading.Thread):
 				senior = Senior.objects.get(device_id=device_id)
 				data["name"]= senior.name
 				data["room_no"] = senior.room_no
-				data["device_type"] = senior.device_type 
+				data["device_type"] = senior.device_type
 				data["gender"] = senior.gender
 				data["data"] = [{"value": 0, "time": 0}]		# Create list to store sensor data
 
 				with onlineSeniorsDict as online_seniors:
 					online_seniors[device_id] = data
-					
+
 				# Send to Node server, only for new devices
-				data["command"] = "ping" 
+				data["command"] = "ping"
 				# zeroMQManager.send(data)
-				sensorDataConsumer.send(data)
+				# sensorDataConsumer.send(data)
+				channel_layer = get_channel_layer()
+					(channel_layer.group_send)(
+					'event_sharif',
+					{
+						'type': 'send_message_to_frontend',
+						'message': data
+					}
+				)
+
 
 			except Exception as e:
-				pass 
+				pass
 
-		
+
 
 	'''
 	This Function receives new sensor for this senior and adds it to list
@@ -107,21 +126,30 @@ class Online_Seniors_Manager(threading.Thread):
 
 		if device_id in onlineSeniorsDict:
 			with onlineSeniorsDict as online_seniors:
-				data2 = copy.deepcopy(data_r)	
+				data2 = copy.deepcopy(data_r)
 				data2.pop("device_id")
-				online_seniors[device_id]["data"].append(data2)	 
+				online_seniors[device_id]["data"].append(data2)
 
 				# Maintain fixed size
 				if len(online_seniors[device_id]["data"]) > MAX_DATA_ARRAY_LEN:
 					online_seniors[device_id]["data"].pop(0)
 
-		# Send to Node server
 		data["command"] = "data"
-		print("-----------------------------------")
-		print(data)
-		print("-----------------------------------")
+		# print("-----------------------------------")
+		# print(data)
+		# print("-----------------------------------")
+		channel_layer = get_channel_layer()
+		async_to_sync(channel_layer.group_send)(
+			'event_sharif',
+			{
+				'type': 'send_message_to_frontend',
+				'message': data
+			}
+		)
+
+		# Send to Node server
 		# zeroMQManager.send(data)
-		sensorDataConsumer.send(data)
+		# sensorDataConsumer.send(data)
 
 
 	'''
@@ -137,8 +165,16 @@ class Online_Seniors_Manager(threading.Thread):
 				if current_time - last_time > DEVICE_TIMEOUT:	# Ping has not be recieved
 					data = {"device_id": key, "command": "offline" }
 					del online_seniors[key]
+					channel_layer = get_channel_layer()
+					async_to_sync(channel_layer.group_send)(
+						'event_sharif',
+						{
+							'type': 'send_message_to_frontend',
+							'message': data
+						}
+					)
 					# zeroMQManager.send(data)					# Send through rabbit channel
-					sensorDataConsumer.send(data)
+					# sensorDataConsumer.send(data)
 
 
 	def run(self):

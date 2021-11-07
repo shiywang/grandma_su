@@ -85,9 +85,20 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'care_api.wsgi.application'
+# WSGI_APPLICATION = 'care_api.wsgi.application'
 
 ASGI_APPLICATION = 'care_api.asgi.application'
+
+
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [CHANNEL_REDIS_HOST],
+#             "symmetric_encryption_keys": [SECRET_KEY],
+#         },
+#     },
+# }
 
 
 REST_FRAMEWORK = {
@@ -167,7 +178,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
 ALLOWED_HOSTS=['*']
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -194,9 +204,9 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
-'''
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3001",
-    "http://127.0.0.1:3001"
-]
-'''
+
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3001",
+#     "http://127.0.0.1:3001"
+# ]

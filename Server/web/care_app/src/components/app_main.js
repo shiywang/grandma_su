@@ -8,25 +8,30 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import UserList from './user_list.js'
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import {exceeded_threshold} from './device_type.js'
-import WSClient from './websocket.js'
+// import WSClient from './websocket.js'
+// import { w3cwebsocket as W3CWebSocket } from 'websocket';
+
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 var randomColor = require('randomcolor'); // import the script
 
-var https_public_url = "https://shiywang.asuscomm.com"
-var http_public_url = "http://shiywang.asuscomm.com"
-var wss_url = "wss://shiywang.asuscomm.com"
+// var https_public_url = "https://shiywang.asuscomm.com"
+var https_public_url = "http://127.0.0.1"
+// var http_public_url = "http://shiywang.asuscomm.com"
+// var wss_url = "wss://shiywang.asuscomm.com"
 // var api_service_host   = 'http://' + env.API_SERVICE_HOST;
 // var node_service_host = 'http://' + env.NODESERVER_SERVICE_HOST;
 // var socketio_server = node_service_host + ':4000/';
 // var api_base_url = api_service_host + ":8000/";
 var socketio_server = https_public_url + ':30006/';
 var topic_name = "userdata";
-var api_base_url = https_public_url + ":30007/";
+var api_base_url = https_public_url + ":8000/";
 
+// const wsclient = new WebSocket('ws://127.0.0.1:8000/ws/sensordata/RR');
+const wsclient = new WebSocket('ws://127.0.0.1:8003');
 
 let headers = new Headers();
 headers.append('Accept', 'application/json');
@@ -47,24 +52,35 @@ class MainApp extends React.Component {
   
   constructor(props){
     super(props);
-    console.log("starting");
-    console.log(api_base_url)
     this.state = {
       collapsed: false,
-      flag: false
+      flag: false,
+      object: ""
     };
     this.OnlineSeniors =  new Map();
     //this.OnlineSeniors.set(temp_user.device_id, temp_user);
   }
 
   componentDidMount(){
-    // const fs = require("fs");
-    // const socket = require("socket.io-client")(socketio_server, {
-    //   ca: fs.readFileSync("./cert_key/isrgrootx1.pem")
-    // });
-    // let socket = io(socketio_server, {transports: ['websocket', 'polling', 'flashsocket']});
-    // let socket = io(socketio_server, {transports: ['websocket', 'polling']});
-    // socket.on(topic_name, this.socket_cb);
+    wsclient.onopen = () => {
+      console.log('WebSocket Client Connected');
+    };
+    // this.wsclient.onclose = (message) => {
+    //   console.log(message);
+    // };
+    // this.wsclient.onerror = (message) => {
+    //   console.log(message);
+    // };
+
+    // wsclient.addEventListener('message', this.openEventListener)
+
+    wsclient.onmessage = (e) => {
+      console.log(e);
+      const object = JSON.parse(e.data);
+      console.log(object);
+      this.setState({object: object});
+      this.setState({flag: !this.state.flag});  // Triggers a re-rendering
+    };
 
     fetch(api_base_url + 'get-online-seniors/', {
         method: 'GET',
@@ -81,9 +97,15 @@ class MainApp extends React.Component {
     }).catch(err => {
       console.log(err)
     });
+
+  }
+
+  openEventListener = (e) => {
+    console.log(e);
   }
 
   socket_cb = data => {
+    console.log(data);
     if( "device_id" in data){
       if(data.command === "ping" && "name" in data ){
         data["watch"] = exceeded_threshold(data.data[data.data.length - 1].value, data.device_type);  // determine whether to add to watch list
@@ -113,7 +135,7 @@ class MainApp extends React.Component {
       }
     }
     this.setState({flag: !this.state.flag});  // Triggers a re-rendering
-  }
+  };
 
   onCollapse = collapsed => {
     console.log(collapsed);
@@ -134,11 +156,11 @@ class MainApp extends React.Component {
               Search 
             </Menu.Item>
             <Menu.Item key="3" icon={<UserOutlined />}>
-              Add New User
+              Add New User 
             </Menu.Item>
-            <Menu.Item key="4" icon={<WSClient/>}>
+            {/* <Menu.Item key="4" icon={<WSClient/>}>
               WebSocket
-            </Menu.Item>
+            </Menu.Item> */}
           </Menu>
         </Sider>
         
@@ -146,10 +168,10 @@ class MainApp extends React.Component {
           <Header className="site-layout-background" style={{ padding: 0 }} />
           <Content style={{ margin: '0 16px' }}>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              <UserList 
+              {/* <UserList 
                 online_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == false)}
                 watch_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == true)}
-              />
+              /> */}
               <UserList
                 online_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == false)}
                 watch_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == true)}
