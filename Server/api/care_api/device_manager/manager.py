@@ -2,7 +2,7 @@ import os, time, copy
 import threading, queue
 from device_manager.zeromq_lib import zeroMQManager
 from data_api.models import Senior
-from device_manager.sensor_data_ws import sensorDataConsumer
+# from device_manager.sensor_data_ws import sensorDataConsumer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -104,10 +104,8 @@ class Online_Seniors_Manager(threading.Thread):
                         'message': data
                     }
                 )
-
-
-        except Exception as e:
-        pass
+            except Exception as e:
+                pass
 
 
 '''
