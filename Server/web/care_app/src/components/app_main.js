@@ -10,10 +10,6 @@ import {
 import UserList from './user_list.js'
 // import io from 'socket.io-client'
 import {exceeded_threshold} from './device_type.js'
-// import WSClient from './websocket.js'
-// import { w3cwebsocket as W3CWebSocket } from 'websocket';
-
-
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 var randomColor = require('randomcolor'); // import the script
@@ -36,15 +32,15 @@ const wsclient = new WebSocket('ws://127.0.0.1:8000/ws/sensordata/RR');
 let headers = new Headers();
 headers.append('Accept', 'application/json');
 
-const temp_user = {
-  "name": "Jeffery Homes",
-  "age": 78,
-  "gender": "male",
-  "device_id": "AG82DD4",
-  "device_type": "ECG",
-  "battery": 50,
-  "data": [{"value": 35, "time": 0}],
-}
+// const temp_user = {
+//   "name": "Jeffery Homes",
+//   "age": 78,
+//   "gender": "male",
+//   "device_id": "AG82DD4",
+//   "device_type": "ECG",
+//   "battery": 50,
+//   "data": [{"value": 35, "time": 0}],
+// }
 
 const max_array_len = 10;
 
@@ -65,14 +61,14 @@ class MainApp extends React.Component {
     wsclient.onopen = () => {
       console.log('WebSocket Client Connected');
     };
-    // this.wsclient.onclose = (message) => {
-    //   console.log(message);
-    // };
-    // this.wsclient.onerror = (message) => {
-    //   console.log(message);
-    // };
 
-    // wsclient.addEventListener('message', this.openEventListener)
+    wsclient.onclose = (message) => {
+      console.log(message);
+    };
+
+    wsclient.onerror = (message) => {
+      console.log(message);
+    };
 
     wsclient.onmessage = (e) => {
       const object = JSON.parse(e.data);
@@ -126,15 +122,6 @@ class MainApp extends React.Component {
 
   }
 
-  openEventListener = (e) => {
-    console.log(e);
-  }
-
-  socket_cb = data => {
-    console.log(data);
-
-  };
-
   onCollapse = collapsed => {
     console.log(collapsed);
     this.setState({ collapsed });
@@ -156,9 +143,6 @@ class MainApp extends React.Component {
             <Menu.Item key="3" icon={<UserOutlined />}>
               Add New User 
             </Menu.Item>
-            {/* <Menu.Item key="4" icon={<WSClient/>}>
-              WebSocket
-            </Menu.Item> */}
           </Menu>
         </Sider>
         
