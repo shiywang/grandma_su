@@ -85,10 +85,13 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'care_api.wsgi.application'
+WSGI_APPLICATION = 'care_api.wsgi.application'
 
 ASGI_APPLICATION = 'care_api.asgi.application'
 
+CHANNEL_LAYERS = {'default':{
+    "BACKEND": "channels.layers.InMemoryChannelLayer"
+}}
 
 # CHANNEL_LAYERS = {
 #     'default': {

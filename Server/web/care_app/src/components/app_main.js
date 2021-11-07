@@ -30,8 +30,8 @@ var socketio_server = https_public_url + ':30006/';
 var topic_name = "userdata";
 var api_base_url = https_public_url + ":8000/";
 
-// const wsclient = new WebSocket('ws://127.0.0.1:8000/ws/sensordata/RR');
-const wsclient = new WebSocket('ws://127.0.0.1:8003');
+const wsclient = new WebSocket('ws://127.0.0.1:8000/ws/sensordata/RR');
+// const wsclient = new WebSocket('ws://127.0.0.1:8003');
 
 let headers = new Headers();
 headers.append('Accept', 'application/json');
@@ -75,10 +75,36 @@ class MainApp extends React.Component {
     // wsclient.addEventListener('message', this.openEventListener)
 
     wsclient.onmessage = (e) => {
-      console.log(e);
       const object = JSON.parse(e.data);
-      console.log(object);
-      this.setState({object: object});
+      var data = object.message;
+      if("device_id" in data){
+        if(data.command === "ping" && "name" in data ){
+          data["watch"] = exceeded_threshold(data.data[data.data.length - 1].value, data.device_type);  // determine whether to add to watch list
+          data["color"] = randomColor({luminosity: 'dark',});
+          console.log("New device ping received.", data);
+          this.OnlineSeniors.set(data.device_id, data);
+        }
+  
+        else if(data.command === "offline" && this.OnlineSeniors.has(data.device_id)){
+          console.log("Device offline");
+          this.OnlineSeniors.delete(data.device_id);
+        }
+  
+        else if(data.command === "data" && this.OnlineSeniors.has(data.device_id)){
+          console.log("Data received");
+          let new_data = {"value": data.value, "time": data.time};
+          this.OnlineSeniors.get(data.device_id).data.push(new_data)
+          this.OnlineSeniors.get(data.device_id).watch = exceeded_threshold(
+            new_data.value, 
+            this.OnlineSeniors.get(data.device_id).device_type
+          ); 
+  
+          // Maintain array size
+          if(this.OnlineSeniors.get(data.device_id).data.length > max_array_len){
+            this.OnlineSeniors.get(data.device_id).data.shift()
+          }
+        }
+      }
       this.setState({flag: !this.state.flag});  // Triggers a re-rendering
     };
 
@@ -106,35 +132,7 @@ class MainApp extends React.Component {
 
   socket_cb = data => {
     console.log(data);
-    if( "device_id" in data){
-      if(data.command === "ping" && "name" in data ){
-        data["watch"] = exceeded_threshold(data.data[data.data.length - 1].value, data.device_type);  // determine whether to add to watch list
-        data["color"] = randomColor({luminosity: 'dark',});
-        console.log("New device ping received.", data);
-        this.OnlineSeniors.set(data.device_id, data);
-      }
 
-      else if(data.command === "offline" && this.OnlineSeniors.has(data.device_id)){
-        console.log("Device offline");
-        this.OnlineSeniors.delete(data.device_id);
-      }
-
-      else if(data.command === "data" && this.OnlineSeniors.has(data.device_id)){
-        console.log("Data received");
-        let new_data = {"value": data.value, "time": data.time};
-        this.OnlineSeniors.get(data.device_id).data.push(new_data)
-        this.OnlineSeniors.get(data.device_id).watch = exceeded_threshold(
-          new_data.value, 
-          this.OnlineSeniors.get(data.device_id).device_type
-        ); 
-
-        // Maintain array size
-        if(this.OnlineSeniors.get(data.device_id).data.length > max_array_len){
-          this.OnlineSeniors.get(data.device_id).data.shift()
-        }
-      }
-    }
-    this.setState({flag: !this.state.flag});  // Triggers a re-rendering
   };
 
   onCollapse = collapsed => {
@@ -168,10 +166,6 @@ class MainApp extends React.Component {
           <Header className="site-layout-background" style={{ padding: 0 }} />
           <Content style={{ margin: '0 16px' }}>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              {/* <UserList 
-                online_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == false)}
-                watch_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == true)}
-              /> */}
               <UserList
                 online_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == false)}
                 watch_seniors={Array.from(this.OnlineSeniors.values()).filter(data=>data.watch == true)}

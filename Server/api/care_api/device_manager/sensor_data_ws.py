@@ -1,6 +1,7 @@
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-
+import json
+# from channels.layers import channel_layer
 
 class SensorDataConsumer(WebsocketConsumer):
     
@@ -50,4 +51,4 @@ class SensorDataConsumer(WebsocketConsumer):
     #     self.send(text_data=data_string)
 
 
-# sensorDataConsumer = SensorDataConsumer()
+sensorDataConsumer = SensorDataConsumer()
