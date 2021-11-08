@@ -1,8 +1,6 @@
 import os, time, copy, json
 import threading, queue
-from device_manager.zeromq_lib import zeroMQManager
 from data_api.models import Senior
-# from device_manager.sensor_data_ws import sensorDataConsumer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -54,8 +52,6 @@ class Online_Seniors_Manager(threading.Thread):
             }
         )
 
-    # zeroMQManager.send(data)
-    # sensorDataConsumer.send(data)
 
     '''
     This Function is used to process pings from node devices. It serves both new and already online devices.
@@ -65,7 +61,6 @@ class Online_Seniors_Manager(threading.Thread):
         "battery": ...
     }
     '''
-
     def add_senior(self, data_r):
         global onlineSeniorsDict
         data = copy.deepcopy(data_r)  # Create deep copy that we can modify
@@ -77,9 +72,7 @@ class Online_Seniors_Manager(threading.Thread):
             with onlineSeniorsDict as online_seniors:
                 online_seniors[device_id]["time"] = data["time"]  # Assign new unix time
                 online_seniors[device_id]["battery"] = data["battery"]
-
-        # New Device
-        else:
+        else:  # New Device
             try:
                 device_id = data.get("device_id")
                 senior = Senior.objects.get(device_id=device_id)
@@ -107,15 +100,15 @@ class Online_Seniors_Manager(threading.Thread):
             except Exception as e:
                 pass
 
-
-# This Function receives new sensor for this senior and adds it to list
-# It takes a dictionary as an argument.
-# data_r = {
-# "device_id": ...
-# "time": ...
-# "value": ...
-# }
-
+    '''
+    This Function receives new sensor for this senior and adds it to list
+    It takes a dictionary as an argument.
+    data_r = {
+    "device_id": ...
+    "time": ...
+    "value": ...
+    }
+    '''
     def add_data(self, data_r):
         global onlineSeniorsDict
         data = copy.deepcopy(data_r)  # Create deep copy that we can modify
@@ -132,9 +125,6 @@ class Online_Seniors_Manager(threading.Thread):
                     online_seniors[device_id]["data"].pop(0)
 
         data["command"] = "data"
-        # print("-----------------------------------")
-        # print(data)
-        # print("-----------------------------------")
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'event_sharif',
@@ -145,16 +135,9 @@ class Online_Seniors_Manager(threading.Thread):
         )
 
 
-    # Send to Node server
-    # zeroMQManager.send(data)
-    # sensorDataConsumer.send(data)
-
-
     '''
     This Function is Executed during Idle periods to find devices that have not pinged in a long time.
     '''
-
-
     def idle(self):
         global onlineSeniorsDict
 
@@ -173,8 +156,6 @@ class Online_Seniors_Manager(threading.Thread):
                             'message': data
                         }
                     )
-                # zeroMQManager.send(data)					# Send through rabbit channel
-                # sensorDataConsumer.send(data)
 
 
     def run(self):

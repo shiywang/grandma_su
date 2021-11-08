@@ -15,17 +15,17 @@ UPDATE_DATA_TIMEOUT = 5
 def exit_handler():
 	print("Deleting Seniors")
 	for senior in senior_queue.queue:
-		pass
-		#senior_manager.delete_senior(senior)
+		# pass
+		senior_manager.delete_senior(senior)
 	print("End")
 
 
-class Test1(Logger):
+class TestECG(Logger):
 	def __init__(self, nseniors):
 		Logger.__init__(self, "Main")
 		self.nseniors = nseniors
 		self.update_percentage = math.ceil(nseniors * 0.15)
-		self.debug("Test 1")
+		self.debug("Test ECG")
 		self.last_ping_time = 0
 		self.last_data_update_time = int(time.time())
 
@@ -64,8 +64,7 @@ if len(sys.argv) < 2:
 	exit()
 
 num_seniors = int(sys.argv[1])
-
 atexit.register(exit_handler)
-test1 = Test1(num_seniors)
+test_run = TestECG(num_seniors)
 api_handler.start()		# Start Thread
-test1.run()
+test_run.run()
