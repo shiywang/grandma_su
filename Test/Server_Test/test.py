@@ -4,7 +4,10 @@ import requests, atexit, time
 from logger import Logger 
 from api_handler import api_handler
 import sys, random, math
+import asyncio
+import websockets
 
+websocket_url = "ws://127.0.0.1:8000/"
 # Queue to hold seniors created
 senior_queue = queue.Queue()
 
@@ -33,7 +36,14 @@ class TestECG(Logger):
 		for senior in tlist:
 			senior_queue.put(senior)
 
-	def run(self):
+	async def run(self):
+		for senior in senior_queue.queue:
+			url = websocket_url + senior.device.type.name + "/" + senior.id
+			async with websockets.connect(url) as websocket:
+				data = senior.get_data()
+
+				await websocket.send("Hello world!")
+
 		while True:
 			# Ping after specified timeout
 			if int(time.time()) - self.last_ping_time > PING_TIMEOUT:
@@ -67,4 +77,4 @@ num_seniors = int(sys.argv[1])
 atexit.register(exit_handler)
 test_run = TestECG(num_seniors)
 api_handler.start()		# Start Thread
-test_run.run()
+asyncio.run(test_run.run())

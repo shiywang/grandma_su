@@ -59,7 +59,7 @@ class SensorDataViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        dataMedium.sensor_data(request.data)        # Forward to Data Medium channel
+        dataMedium.sensor_data(request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -79,7 +79,7 @@ class SensorDataViewSet(viewsets.ModelViewSet):
 
 
 @csrf_exempt
-def PingEndpoint(request): 
+def PingEndpoint(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         try:
