@@ -5,14 +5,14 @@ from logger import Logger
 from api_handler import api_handler
 import sys, random, math
 import asyncio
-import websockets
+# import websockets
 
 websocket_url = "ws://127.0.0.1:8000/"
 # Queue to hold seniors created
 senior_queue = queue.Queue()
 
 PING_TIMEOUT 		= 60
-UPDATE_DATA_TIMEOUT = 5
+UPDATE_DATA_TIMEOUT = 1
 
 # On program exit delete users from database
 def exit_handler():
@@ -36,13 +36,13 @@ class TestECG(Logger):
 		for senior in tlist:
 			senior_queue.put(senior)
 
-	async def run(self):
-		for senior in senior_queue.queue:
-			url = websocket_url + senior.device.type.name + "/" + senior.id
-			async with websockets.connect(url) as websocket:
-				data = senior.get_data()
-
-				await websocket.send("Hello world!")
+	def run(self):
+		# for senior in senior_queue.queue:
+		# 	url = websocket_url + senior.device.type.name + "/" + senior.id
+		# 	async with websockets.connect(url) as websocket:
+		# 		data = senior.get_data()
+		#
+		# 		await websocket.send("Hello world!")
 
 		while True:
 			# Ping after specified timeout
@@ -77,4 +77,5 @@ num_seniors = int(sys.argv[1])
 atexit.register(exit_handler)
 test_run = TestECG(num_seniors)
 api_handler.start()		# Start Thread
-asyncio.run(test_run.run())
+test_run.run()
+# asyncio.run(test_run.run())

@@ -60,6 +60,7 @@ class Api_Handler(threading.Thread):
 def custom_senior_delete(device_id):
 	r = requests.delete(base_url+"seniors/"+device_id, auth=(api_user, api_password))
 
+
 def custom_create_senior(data):
 	r = requests.post(base_url+"seniors/", headers=request_headers, auth=(api_user, api_password), data=data)
 	if r.status_code == 201:
