@@ -26,12 +26,13 @@ class SensorDataConsumer(WebsocketConsumer):
 
     def receive(self, text_data=None, bytes_data=None):
         print(" MESSAGE RECEIVED")
-        data = json.loads(text_data)
-        message = data['message']
+        # print(text_data)
+        # data = json.loads(text_data)
+        # message = data['message']
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,{
                 "type": 'send_message_to_frontend',
-                "message": message
+                "message": text_data
             }
         )
 
