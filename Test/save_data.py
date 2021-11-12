@@ -1,4 +1,3 @@
-import os, sys
 import random
 
 filename = "./data_store/test.txt"

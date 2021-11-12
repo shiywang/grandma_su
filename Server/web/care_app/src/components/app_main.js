@@ -58,6 +58,7 @@ class MainApp extends React.Component {
   }
 
   componentDidMount(){
+
     wsclient.onopen = () => {
       console.log('WebSocket Client Connected');
     };
@@ -70,38 +71,8 @@ class MainApp extends React.Component {
       console.log(message);
     };
 
-    wsclient.onmessage = (e) => {
-      const object = JSON.parse(e.data);
-      var data = object.message;
-      if("device_id" in data){
-        if(data.command === "ping" && "name" in data ){
-          data["watch"] = exceeded_threshold(data.data[data.data.length - 1].value, data.device_type);  // determine whether to add to watch list
-          data["color"] = randomColor({luminosity: 'dark',});
-          console.log("New device ping received.", data);
-          this.OnlineSeniors.set(data.device_id, data);
-        }
-  
-        else if(data.command === "offline" && this.OnlineSeniors.has(data.device_id)){
-          console.log("Device offline");
-          this.OnlineSeniors.delete(data.device_id);
-        }
-  
-        else if(data.command === "data" && this.OnlineSeniors.has(data.device_id)){
-          console.log("Data received");
-          let new_data = {"value": data.value, "time": data.time};
-          this.OnlineSeniors.get(data.device_id).data.push(new_data)
-          this.OnlineSeniors.get(data.device_id).watch = exceeded_threshold(
-            new_data.value, 
-            this.OnlineSeniors.get(data.device_id).device_type
-          ); 
-  
-          // Maintain array size
-          if(this.OnlineSeniors.get(data.device_id).data.length > max_array_len){
-            this.OnlineSeniors.get(data.device_id).data.shift()
-          }
-        }
-      }
-      this.setState({flag: !this.state.flag});  // Triggers a re-rendering
+    wsclient.onmessage = (message) => {
+      this.call_back(message);
     };
 
     fetch(api_base_url + 'get-online-seniors/', {
@@ -121,6 +92,25 @@ class MainApp extends React.Component {
     });
 
   }
+
+  call_back = e =>  {
+    const object = JSON.parse(e.data);
+    var jmsg = JSON.parse(object.message);
+    console.log(jmsg);
+    if(this.OnlineSeniors.has(jmsg.device_id)) {
+      let new_data = {"value": jmsg.value, "time": jmsg.time};
+      this.OnlineSeniors.get(jmsg.device_id).data.push(new_data)
+      this.OnlineSeniors.get(jmsg.device_id).watch = exceeded_threshold(
+          new_data.value, 
+          this.OnlineSeniors.get(jmsg.device_id).device_type
+      );
+      // Maintain array size
+      if(this.OnlineSeniors.get(jmsg.device_id).data.length > max_array_len){
+        this.OnlineSeniors.get(jmsg.device_id).data.shift();
+      }
+    }
+    this.setState({flag: !this.state.flag});  // Triggers a re-rendering
+  };
 
   onCollapse = collapsed => {
     console.log(collapsed);

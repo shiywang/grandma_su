@@ -1,3 +1,4 @@
+import json
 import queue
 import atexit
 import time
@@ -47,7 +48,7 @@ class TestECG(Logger):
                     update_list = random.sample(senior_queue.queue, self.update_percentage)
                     for senior in update_list:
                         data = senior.get_data()
-                        await websocket.send(str(data))
+                        await websocket.send(json.dumps(data))
                     self.last_data_update_time = int(time.time())
                 # device_type = senior.device.type.name
                 # data = senior.get_data()
