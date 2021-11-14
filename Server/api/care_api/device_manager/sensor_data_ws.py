@@ -12,23 +12,30 @@ MAX_DATA_ARRAY_LEN = 10
 class SensorDataConsumer(WebsocketConsumer):
     
     def connect(self):
-        self.room_name = 'event'
-        self.room_group_name = self.room_name+"_sharif"
+        self.device_id = self.scope['url_route']['kwargs']['device_id']
+        self.device_group_name = self.device_id
         async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name,
+            self.device_group_name,
             self.channel_name
         )
-        print(self.room_group_name)
+        print(self.device_group_name)
         self.accept()
         print("#######CONNECTED############")
 
 
     def disconnect(self, code):
+        global onlineSeniorsDict
+
         async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name,
+            self.device_group_name,
             self.channel_name
         )
+
+        with onlineSeniorsDict as online_seniors:
+            del online_seniors[self.device_id]
+
         print("DISCONNECED CODE: ",code)
+        print("Device IDL ", self.device_id)
 
     def receive(self, text_data=None):
         global onlineSeniorsDict
@@ -54,20 +61,8 @@ class SensorDataConsumer(WebsocketConsumer):
             with onlineSeniorsDict as online_seniors:
                 online_seniors[device_id] = data
 
-        # if device_id in onlineSeniorsDict:
-        #     with onlineSeniorsDict as online_seniors:
-        #         data2 = copy.deepcopy(data_r)
-        #         data2.pop("device_id")
-        #         online_seniors[device_id]["data"].append(data2)
-
-        #         # Maintain fixed size
-        #         if len(online_seniors[device_id]["data"]) > MAX_DATA_ARRAY_LEN:
-        #             online_seniors[device_id]["data"].pop(0)
-
-        # if dataMedium.senior_exist(text_data['device_id']) is False:
-
         async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,{
+            self.device_group_name,{
                 "type": 'send_message_to_frontend',
                 "message": text_data
             }

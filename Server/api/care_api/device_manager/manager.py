@@ -26,18 +26,18 @@ class Online_Seniors_Manager(threading.Thread):
         with onlineSeniorsDict as online_seniors:
             del online_seniors[device_id]
 
-        data = {
-            "device_id": device_id,
-            "command": "offline",
-        }
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            'event_sharif',
-            {
-                'type': 'send_message_to_frontend',
-                'message': data
-            }
-        )
+        # data = {
+        #     "device_id": device_id,
+        #     "command": "offline",
+        # }
+        # channel_layer = get_channel_layer()
+        # async_to_sync(channel_layer.group_send)(
+        #     'event_sharif',
+        #     {
+        #         'type': 'send_message_to_frontend',
+        #         'message': data
+        #     }
+        # )
 
     # def senior_exist(self, device_id) -> bool:
     #     global onlineSeniorsDict

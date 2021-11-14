@@ -12,7 +12,10 @@ import asyncio
 import websockets
 import argparse
 import os
-
+from random import seed
+from random import randint
+# seed random number generator
+# generate some integers
 
 websocket_url = "ws://127.0.0.1:8000/"
 senior_queue = queue.Queue()
@@ -49,19 +52,17 @@ class TestECG(Logger):
             senior_queue.put(senior)
 
     async def run(self):
-        url = websocket_url + 'ws/sensordata/RR'
-        async with websockets.connect(url) as websocket:
-            while True:
-                if int(time.time()) - self.last_data_update_time > UPDATE_DATA_TIMEOUT:
-                    update_list = random.sample(senior_queue.queue, self.update_percentage)
-                    for senior in update_list:
+        for senior in senior_queue.queue:
+            device_id = senior.id
+            url = websocket_url + 'ws/sensordata/RR/' + device_id 
+            async with websockets.connect(url) as websocket:
+                while True:
+                    if int(time.time()) - self.last_data_update_time > UPDATE_DATA_TIMEOUT:
+                        new_rand_value = randint(60, 120)
+                        senior.device.value = new_rand_value
                         data = senior.get_data()
                         await websocket.send(json.dumps(data))
-                    self.last_data_update_time = int(time.time())
-                # device_type = senior.device.type.name
-                # data = senior.get_data()
-                # url = base_url + "sensordata/" + device_type + '/'
-                # r = requests.post(url, headers=request_headers, auth=(api_user, api_password), data=json.dumps(data))
+                        self.last_data_update_time = int(time.time())
 
 
 if __name__ == '__main__':
@@ -81,7 +82,6 @@ if __name__ == '__main__':
             pass
         
 
-    # input_num = int(sys.argv[1])
     atexit.register(exit_handler)
     test_run = TestECG(input_num)
     api_handler.start()
