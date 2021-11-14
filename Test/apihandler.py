@@ -64,9 +64,10 @@ def custom_senior_delete(device_id):
 def custom_create_senior(data):
 	r = requests.post(base_url+"seniors/", headers=request_headers, auth=(api_user, api_password), data=data)
 	if r.status_code == 201:
+		# print(r.json())
 		return True
 	else:
-		print(r.json())
+		# print(r.json())
 		return False
 
 

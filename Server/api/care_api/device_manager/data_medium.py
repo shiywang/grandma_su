@@ -16,6 +16,9 @@ class DataMedium:
         onlineSeniorsManager.start()
         pass 
 
+    def senior_exist(self, device_id):
+        return onlineSeniorsManager.senior_exist(device_id)
+
     def ping(self, data):
         try:
             if not all (key in data for key in ("device_id", "battery")):
@@ -37,7 +40,7 @@ class DataMedium:
             onlineSeniorsManager.onThread(onlineSeniorsManager.add_data, data)
         except Exception as e:
             print(e)
-        pass 
+        pass
 
 
     def stop(self):

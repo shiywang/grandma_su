@@ -25,7 +25,8 @@ class Senior:
         return {
             "device_id": self.id,
             "time": int(time.time()),
-            "value": self.device.get_value()
+            "value": self.device.get_value(),
+            "battery": 60,
         }
 
     def __str__(self):
@@ -41,13 +42,14 @@ class SeniorManager(Logger):
         senior_list = []
         data_list = file_manager.read_data(count)
         if len(data_list) == 0:
-            self.info("No saved data, Creating new data")
-            for i in range(count):
-                senior = None
-                while senior is None:
-                    senior = self.make_senior()
-                senior_list.append(senior)
-
+            return data_list
+        # if len(data_list) == 0:
+        #     self.info("No saved data, Creating new data")
+        #     for i in range(count):
+        #         senior = None
+        #         while senior is None:
+        #             senior = self.make_senior()
+        #         senior_list.append(senior)
         else:
             self.info("Using saved data")
             for data in data_list:

@@ -10,12 +10,15 @@ import random
 import math
 import asyncio
 import websockets
+import argparse
+import os
+
 
 websocket_url = "ws://127.0.0.1:8000/"
 senior_queue = queue.Queue()
 
 PING_TIMEOUT = 60
-UPDATE_DATA_TIMEOUT = 5
+UPDATE_DATA_TIMEOUT = 1
 
 
 # On program exit delete users from database
@@ -37,6 +40,11 @@ class TestECG(Logger):
         self.last_data_update_time = int(time.time())
 
         seniors = senior_manager.get_senior(num_senior)
+
+        if len(seniors) == 0:
+            print("create new seniors")
+            seniors = [senior_manager.make_senior() for _ in range(num_senior)]
+
         for senior in seniors:
             senior_queue.put(senior)
 
@@ -57,11 +65,23 @@ class TestECG(Logger):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Need to provide exact 2 arguments")
-        exit()
+    parser = argparse.ArgumentParser(description='args.')
+    parser.add_argument('-n', '--num', type=int, default=1)
+    parser.add_argument('-d', '--dele', default=True)
 
-    input_num = int(sys.argv[1])
+    args = parser.parse_args()
+    input_num = args.num
+    if args.dele is True:
+        try:
+            os.remove("./data_store/test.txt")
+        except OSError:
+            pass
+
+        with open("./data_store/test.txt", 'a') as results_file:
+            pass
+        
+
+    # input_num = int(sys.argv[1])
     atexit.register(exit_handler)
     test_run = TestECG(input_num)
     api_handler.start()

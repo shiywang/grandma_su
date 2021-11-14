@@ -3,25 +3,12 @@ import threading, queue
 from data_api.models import Senior
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from device_manager.online_senior_dict import Online_Seniors
 
 DEVICE_TIMEOUT = 60 * 5
 MAX_DATA_ARRAY_LEN = 10
 
 
-class Online_Seniors(dict):
-    def __init__(self, *p_arg, **n_arg):
-        dict.__init__(self, *p_arg, **n_arg)
-        self.__lock = threading.RLock()
-
-    def __enter__(self):
-        self.__lock.acquire()
-        return self
-
-    def __exit__(self, type, value, traceback):
-        self.__lock.release()
-
-
-# Global Dictionary of Online Seniors
 onlineSeniorsDict = Online_Seniors()
 
 
@@ -52,6 +39,12 @@ class Online_Seniors_Manager(threading.Thread):
             }
         )
 
+    # def senior_exist(self, device_id) -> bool:
+    #     global onlineSeniorsDict
+    #     if device_id in onlineSeniorsDict:
+    #         return True
+    #     else:
+    #         return False
 
     '''
     This Function is used to process pings from node devices. It serves both new and already online devices.
@@ -86,17 +79,17 @@ class Online_Seniors_Manager(threading.Thread):
                     online_seniors[device_id] = data
 
                 # Send to Node server, only for new devices
-                data["command"] = "ping"
-                # zeroMQManager.send(data)
-                # sensorDataConsumer.send(data)
-                channel_layer = get_channel_layer()
-                (channel_layer.group_send)(
-                    'event_sharif',
-                    {
-                        'type': 'send_message_to_frontend',
-                        'message': data
-                    }
-                )
+                # data["command"] = "ping"
+                # # zeroMQManager.send(data)
+                # # sensorDataConsumer.send(data)
+                # channel_layer = get_channel_layer()
+                # (channel_layer.group_send)(
+                #     'event_sharif',
+                #     {
+                #         'type': 'send_message_to_frontend',
+                #         'message': data
+                #     }
+                # )
             except Exception as e:
                 pass
 
@@ -124,15 +117,15 @@ class Online_Seniors_Manager(threading.Thread):
                 if len(online_seniors[device_id]["data"]) > MAX_DATA_ARRAY_LEN:
                     online_seniors[device_id]["data"].pop(0)
 
-        data["command"] = "data"
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            'event_sharif',
-            {
-                'type': 'send_message_to_frontend',
-                'message': data
-            }
-        )
+        # data["command"] = "data"
+        # channel_layer = get_channel_layer()
+        # async_to_sync(channel_layer.group_send)(
+        #     'event_sharif',
+        #     {
+        #         'type': 'send_message_to_frontend',
+        #         'message': data
+        #     }
+        # )
 
 
     '''
@@ -146,16 +139,16 @@ class Online_Seniors_Manager(threading.Thread):
             for key in list(online_seniors):
                 last_time = online_seniors[key]["time"]
                 if current_time - last_time > DEVICE_TIMEOUT:  # Ping has not be recieved
-                    data = {"device_id": key, "command": "offline"}
+                    # data = {"device_id": key, "command": "offline"}
                     del online_seniors[key]
-                    channel_layer = get_channel_layer()
-                    async_to_sync(channel_layer.group_send)(
-                        'event_sharif',
-                        {
-                            'type': 'send_message_to_frontend',
-                            'message': data
-                        }
-                    )
+                    # channel_layer = get_channel_layer()
+                    # async_to_sync(channel_layer.group_send)(
+                    #     'event_sharif',
+                    #     {
+                    #         'type': 'send_message_to_frontend',
+                    #         'message': data
+                    #     }
+                    # )
 
 
     def run(self):
