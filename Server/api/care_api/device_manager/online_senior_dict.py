@@ -16,4 +16,3 @@ class Online_Seniors(dict):
     # def add_seniors(self, device_id):
 
 # Global Dictionary of Online Seniors
-onlineSeniorsDict = Online_Seniors()
