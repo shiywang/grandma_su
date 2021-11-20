@@ -34,6 +34,7 @@ class Api_Handler(threading.Thread):
 		data = senior.get_data()
 		url = base_url + "sensordata/" + device_type + '/'
 		r = requests.post(url, headers=request_headers, auth=(api_user, api_password), data=json.dumps(data))
+		senior.seq = senior.seq + 1
 
 	def send_ping(self, senior):
 		data = {

@@ -16,15 +16,18 @@ class Senior:
 
 		self.device 	= device 
 		self.id 		= device.id
-
+		self.seq = 1
+		
 	def get_battery(self):
 		return 60
 
 	def get_data(self):
 		return {
 			"device_id": self.id,
-			"time": int(time.time()),
-			"value" : self.device.get_value()
+			"sequence_id": self.seq,
+			"time":  int(round(time.time() * 1000)),
+			"value" : self.device.get_value(),
+			"battery": 60,
 		}
 
 	def __str__(self):

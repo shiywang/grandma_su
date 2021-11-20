@@ -94,6 +94,8 @@ class MainApp extends React.Component {
       else if(data.command === "data" && this.OnlineSeniors.has(data.device_id)){
         console.log("Data received");
         let new_data = {"value": data.value, "time": data.time};
+        const time_now = Date.now();
+        console.log(data, time_now - data.time);
         this.OnlineSeniors.get(data.device_id).data.push(new_data)
         this.OnlineSeniors.get(data.device_id).watch = exceeded_threshold(
           new_data.value, 
