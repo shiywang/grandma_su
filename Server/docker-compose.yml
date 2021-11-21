@@ -33,7 +33,7 @@ services:
   web:
     build: ./web/
     stdin_open: true
-    command: npm start --prefix care_app/
+    command: npm start 
     volumes:
       - './web:/code'
       #- './code/node_modules'
