@@ -1,6 +1,6 @@
 import os, sys
 import random
-filename = "./data_store/data_store1.txt"
+filename = "./data_store/test.txt"
 
 class File_Manager:
     def __init__(self):

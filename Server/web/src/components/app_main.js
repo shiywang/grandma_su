@@ -15,7 +15,7 @@ const { SubMenu } = Menu;
 var randomColor = require('randomcolor'); // import the script
 
 //var home_addr = 'http://128.119.85.163';
-var home_addr = 'http://localhost';
+var home_addr = 'http://0.0.0.0';
 var socketio_server = home_addr + ':4000/';
 var topic_name = "userdata";
 var api_base_url = home_addr + ":8002/";
@@ -53,19 +53,36 @@ class MainApp extends React.Component {
     let socket = io(socketio_server, {transports: ['websocket', 'polling', 'flashsocket']});
     socket.on(topic_name, this.socket_cb);
 
+    // fetch(api_base_url + 'get-online-seniors/', {
+    //     method: 'GET',
+    //     headers: headers
+    // })
+    // .then((response) => response.json())
+    // .then((data) => {
+    //   for (var key  in data){
+    //     data[key]["watch"] = exceeded_threshold(data[key].data[data[key].data.length - 1].value, data[key].device_type);  // determine whether to add to watch list
+    //     data[key]["color"] = randomColor({luminosity: 'dark',});
+    //     this.OnlineSeniors.set(key, data[key]);
+    //   }
+    //   this.setState({flag: !this.state.flag});  // Triggers a re-rendering
+    // });
     fetch(api_base_url + 'get-online-seniors/', {
-        method: 'GET',
-        headers: headers
+      method: 'GET',
+      headers: headers
     })
     .then((response) => response.json())
     .then((data) => {
-      for (var key  in data){
+      for (var key in data){
         data[key]["watch"] = exceeded_threshold(data[key].data[data[key].data.length - 1].value, data[key].device_type);  // determine whether to add to watch list
         data[key]["color"] = randomColor({luminosity: 'dark',});
         this.OnlineSeniors.set(key, data[key]);
       }
       this.setState({flag: !this.state.flag});  // Triggers a re-rendering
+    }).catch(err => {
+      console.log(err)
     });
+
+
   }
 
   socket_cb = data => {

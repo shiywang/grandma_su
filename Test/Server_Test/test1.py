@@ -1,3 +1,7 @@
+import argparse
+import multiprocessing
+import os
+
 from senior import senior_manager
 import queue, time
 import requests, atexit, time
@@ -59,13 +63,29 @@ class Test1(Logger):
 ###
 # Main Entry Point 
 ###
-if len(sys.argv) < 2:
-	print("Incomplete arguments")
-	exit()
+if __name__ == '__main__':
+	parser = argparse.ArgumentParser(description='args.')
+	parser.add_argument('-n', '--num', type=int, default=1)
+	parser.add_argument('-d', '--dele', default=True)
 
-num_seniors = int(sys.argv[1])
+	print("Number of cpu :", multiprocessing.cpu_count())
+	args = parser.parse_args()
+	input_num = args.num
+	if args.dele is True:
+		try:
+			os.remove("./data_store/test.txt")
+		except OSError:
+			pass
 
-atexit.register(exit_handler)
-test1 = Test1(num_seniors)
-api_handler.start()		# Start Thread
-test1.run()
+		with open("./data_store/test.txt", 'a') as results_file:
+			pass
+
+	if len(sys.argv) < 2:
+		print("Incomplete arguments")
+		exit()
+
+
+	atexit.register(exit_handler)
+	test1 = Test1(input_num)
+	api_handler.start()		# Start Thread
+	test1.run()
