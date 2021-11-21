@@ -2,8 +2,8 @@ import os
 import requests
 import queue, threading, json
 
-api_user = "admin"
-api_password = "uched4123"
+api_user = "admin1"
+api_password = "test"
 base_url = "http://127.0.0.1:8002/"
 #base_url = "http://128.119.85.163:8002/"
 request_headers = {'Content-Type': 'application/json',}
@@ -34,6 +34,7 @@ class Api_Handler(threading.Thread):
 		data = senior.get_data()
 		url = base_url + "sensordata/" + device_type + '/'
 		r = requests.post(url, headers=request_headers, auth=(api_user, api_password), data=json.dumps(data))
+		senior.seq = senior.seq + 1
 
 	def send_ping(self, senior):
 		data = {
