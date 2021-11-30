@@ -8,12 +8,13 @@ import requests, atexit, time
 from logger import Logger
 from api_handler import api_handler
 import sys, random, math
+from random import randint
 
 # Queue to hold seniors created
 senior_queue = queue.Queue()
 
 PING_TIMEOUT = 60
-UPDATE_DATA_TIMEOUT = 5
+UPDATE_DATA_TIMEOUT = 1
 
 
 # On program exit delete users from database
@@ -40,23 +41,30 @@ class Test1(Logger):
     def run(self):
         while True:
             # Ping after specified timeout
-            if int(time.time()) - self.last_ping_time > PING_TIMEOUT:
-                self.debug("Pinging ...")
-                for senior in senior_queue.queue:
+            for senior in senior_queue.queue:
+                if int(time.time()) - senior.last_ping_time > PING_TIMEOUT:
+                    # self.debug("Pinging ...")
                     api_handler.onThread(api_handler.send_ping, senior)
-
-                self.last_ping_time = int(time.time())
+                    senior.last_ping_time = int(time.time())
+                    # self.last_ping_time = int(time.time())
 
             # Randomly update data
-            if int(time.time()) - self.last_data_update_time > UPDATE_DATA_TIMEOUT:
-                self.debug("Updating data")
-
-                # Randomly seniors to update
-                update_list = random.sample(senior_queue.queue, self.update_percentage)
-                for senior in update_list:
-                    api_handler.onThread(api_handler.send_data, senior)
-
-                self.last_data_update_time = int(time.time())
+                if int(time.time()) - senior.last_data_update_time > UPDATE_DATA_TIMEOUT:
+                    # self.debug("Updating data")
+                    # Randomly seniors to update
+                    # update_list = random.sample(senior_queue.queue, self.update_percentage)
+                    new_rand_value = randint(60, 120)
+                    # for senior in update_list:
+                    test_json = {
+                            "device_id": senior.id,
+                            "sequence_id": senior.seq,
+                            "time": int(round(time.time() * 1000)),
+                            "value": new_rand_value,
+                            "battery": 60,
+                    }
+                    print(test_json)
+                    api_handler.onThread(api_handler.send_data, senior, test_json)
+                    senior.last_data_update_time = int(time.time())
 
 
 ###

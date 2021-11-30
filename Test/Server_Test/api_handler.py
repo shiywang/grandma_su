@@ -2,7 +2,7 @@ import os
 import requests
 import queue, threading, json
 
-api_user = "admin1"
+api_user = "test"
 api_password = "test"
 base_url = "http://127.0.0.1:8002/"
 #base_url = "http://128.119.85.163:8002/"
@@ -29,9 +29,9 @@ class Api_Handler(threading.Thread):
 	def delete_user(self, device_id):
 		r = requests.delete(base_url+"seniors/"+device_id, auth=(api_user, api_password))
 
-	def send_data(self, senior):
+	def send_data(self, senior, data):
 		device_type = senior.device.type.name
-		data = senior.get_data()
+		# data = senior.get_data()
 		url = base_url + "sensordata/" + device_type + '/'
 		r = requests.post(url, headers=request_headers, auth=(api_user, api_password), data=json.dumps(data))
 		senior.seq = senior.seq + 1

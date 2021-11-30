@@ -4,6 +4,10 @@
 *.key
 *.pyc
 
+**/*.pyc
+*.pyc 
+./Test/Server_Test/__pycache__/
+
 # Compiled Object files
 *.slo
 *.lo
