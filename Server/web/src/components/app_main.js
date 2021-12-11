@@ -90,20 +90,19 @@ class MainApp extends React.Component {
       if(data.command === "ping" && "name" in data ){
         data["watch"] = exceeded_threshold(data.data[data.data.length - 1].value, data.device_type);  // determine whether to add to watch list
         data["color"] = randomColor({luminosity: 'dark',});
-        console.log("New device ping received.", data);
+        console.log("New device ping received. ", data['device_id']);
         this.OnlineSeniors.set(data.device_id, data);
       }
 
       else if(data.command === "offline" && this.OnlineSeniors.has(data.device_id)){
-        console.log("Device offline");
+        console.log("Device offline ", data['device_id']);
         this.OnlineSeniors.delete(data.device_id);
       }
 
       else if(data.command === "data" && this.OnlineSeniors.has(data.device_id)){
-        console.log("Data received");
         let new_data = {"value": data.value, "time": data.time};
         const time_now = Date.now();
-        console.log(data, time_now - data.time);  
+        console.log(data['device_id'], data['sequence_id'], data['value'], time_now - data['time']);
         this.OnlineSeniors.get(data.device_id).data.push(new_data)
         this.OnlineSeniors.get(data.device_id).watch = exceeded_threshold(
           new_data.value, 

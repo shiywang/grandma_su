@@ -20,7 +20,7 @@ api_password    = "uched4123"
 base_url        = "http://127.0.0.1:8002/"
 request_headers = {'Content-Type': 'application/json',}
 
-test_device_id      = "7E528A676931";
+test_device_id      = "7E528A676931"
 test_device_type    = "RR"
 
 

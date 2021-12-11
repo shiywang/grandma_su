@@ -44,7 +44,8 @@ class Test1(Logger):
             for senior in senior_queue.queue:
                 if int(time.time()) - senior.last_ping_time > PING_TIMEOUT:
                     # self.debug("Pinging ...")
-                    api_handler.onThread(api_handler.send_ping, senior)
+                    # api_handler.onThread(api_handler.send_ping, senior)
+                    api_handler.send_ping(senior)
                     senior.last_ping_time = int(time.time())
                     # self.last_ping_time = int(time.time())
 
@@ -62,8 +63,9 @@ class Test1(Logger):
                             "value": new_rand_value,
                             "battery": 60,
                     }
-                    print(test_json)
-                    api_handler.onThread(api_handler.send_data, senior, test_json)
+                    print(test_json['device_id'], test_json['sequence_id'], test_json['time'], test_json['value'])
+                    # api_handler.onThread(api_handler.send_data, senior, test_json)
+                    api_handler.send_data(senior, test_json)
                     senior.last_data_update_time = int(time.time())
 
 

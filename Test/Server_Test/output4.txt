@@ -1,0 +1,5 @@
+Number of cpu : 8
+[D] Main: Test 1
+[I] SP: No saved data, Creating new data
+Deleting Seniors
+End
